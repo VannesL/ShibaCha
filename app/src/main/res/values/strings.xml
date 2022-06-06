@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">ShibaCha_app</string>
+    <string name="app_name">ShibaCha</string>
+    <string name="ok_button">OK</string>
+    <string name="name_field">Name</string>
+    <string name="email_field">Email</string>
+    <string name="age_field">Age</string>
+    <string name="male_option">Male</string>
+    <string name="female_option">Female</string>
+    <string name="others_option">Others</string>
+    <string name="register_button">Register</string>
+    <string name="login_button">Login</string>
 </resources>
