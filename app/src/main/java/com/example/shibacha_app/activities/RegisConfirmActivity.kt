@@ -1,10 +1,10 @@
-package com.example.shibacha_app
+package com.example.shibacha_app.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.shibacha_app.databinding.RegisConfirmBinding
 
-class RegisConfirmScreen : AppCompatActivity() {
+class RegisConfirmActivity : AppCompatActivity() {
 
     private lateinit var binding: RegisConfirmBinding
 

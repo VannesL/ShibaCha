@@ -1,6 +1,7 @@
-package com.example.shibacha_app
+package com.example.shibacha_app.activities
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
@@ -47,9 +48,9 @@ class MainActivity : AppCompatActivity() {
             binding.genderOptions.visibility = View.VISIBLE
             regisState = GENDER
         }
-//        else {
-//
-//        }
+        else {
+            Intent changeActivity = new Intent(applicationContext, )
+        }
     }
 
     private fun handleKeyEvent(view: View, keyCode: Int): Boolean {
