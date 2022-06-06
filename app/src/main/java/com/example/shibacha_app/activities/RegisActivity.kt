@@ -10,9 +10,10 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat.getSystemService
 import com.example.shibacha_app.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class RegisActivity : AppCompatActivity() {
 
     private val NAME = "Name"
     private val EMAIL = "Email"
@@ -33,12 +34,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //ok button
         binding.okButton.setOnClickListener { nextField() }
+
+        //remove keyboard on enter
         binding.nameField.setOnKeyListener {view, keyCode, _ -> handleKeyEvent(view, keyCode) }
         binding.emailField.setOnKeyListener {view, keyCode, _ -> handleKeyEvent(view, keyCode) }
         binding.ageField.setOnKeyListener {view, keyCode, _ -> handleKeyEvent(view, keyCode) }
     }
 
+    //on click functions
     private fun nextField() {
         if (regisState == NAME) {
             binding.nameField.visibility = View.INVISIBLE
@@ -56,10 +61,13 @@ class MainActivity : AppCompatActivity() {
             regisState = GENDER
         }
         else {
-//            Intent changeActivity = new Intent(applicationContext, )
+            val intent = Intent(this, ConfirmDetailsActivity::class.java)
+            startActivity(intent)
         }
     }
 
+
+    //remove keyboard
     private fun handleKeyEvent(view: View, keyCode: Int): Boolean {
         if (keyCode == KeyEvent.KEYCODE_ENTER) {
             // Hide the keyboard
