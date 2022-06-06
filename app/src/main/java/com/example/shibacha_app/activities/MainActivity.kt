@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.KeyEvent
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import com.example.shibacha_app.databinding.ActivityMainBinding
 
@@ -23,6 +25,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Removing Title and Action Bar
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        supportActionBar?.hide();
+        //
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
