@@ -4,25 +4,23 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.InputType
 import android.view.KeyEvent
 import android.view.View
 import android.view.Window
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
-import com.example.shibacha_app.databinding.ActivityMainBinding
+import com.example.shibacha_app.databinding.ActivityRegisBinding
 
 class RegisActivity : AppCompatActivity() {
 
     private val NAME = "Name"
     private val EMAIL = "Email"
+    private val PASS = "Password"
     private val AGE = "Age"
     private val GENDER = "Gender"
     private var regisState = NAME
 //    private var textHint = "NAME"
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityRegisBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +29,7 @@ class RegisActivity : AppCompatActivity() {
 //        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         supportActionBar?.hide();
         //
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityRegisBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         //ok button
@@ -52,6 +50,11 @@ class RegisActivity : AppCompatActivity() {
         }
         else if (regisState == EMAIL) {
             binding.emailField.visibility = View.INVISIBLE
+            binding.passField.visibility = View.VISIBLE
+            regisState = PASS
+        }
+        else if(regisState == PASS) {
+            binding.passField.visibility = View.INVISIBLE
             binding.ageField.visibility = View.VISIBLE
             regisState = AGE
         }

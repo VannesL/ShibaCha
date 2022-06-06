@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.shibacha_app.R
 import com.example.shibacha_app.databinding.ActivityIntroBinding
-import com.example.shibacha_app.databinding.ActivityMainBinding
 
 class IntroActivity : AppCompatActivity() {
 

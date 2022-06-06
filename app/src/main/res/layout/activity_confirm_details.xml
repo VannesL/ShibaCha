@@ -43,6 +43,25 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/pass_field"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:hint="@string/password_field"
+        app:endIconMode="password_toggle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/email_field">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/pass_field_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/age_field"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -50,7 +69,7 @@
         android:hint="@string/age_field"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/email_field">
+        app:layout_constraintTop_toBottomOf="@id/pass_field">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/age_field_text"
