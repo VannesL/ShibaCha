@@ -9,8 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShibaCha_app">
+<<<<<<< Updated upstream
         <activity
             android:name=".activities.IntroActivity">
+=======
+        <activity android:name=".activities.HomeActivity"></activity>
+        <activity android:name=".activities.MainActivity">
+>>>>>>> Stashed changes
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

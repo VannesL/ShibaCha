@@ -25,9 +25,9 @@ class RegisActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Removing Title and Action Bar
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        supportActionBar?.hide();
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+////        this.window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        supportActionBar?.hide();
         //
         binding = ActivityRegisBinding.inflate(layoutInflater)
         setContentView(binding.root)
