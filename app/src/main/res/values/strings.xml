@@ -1,6 +1,28 @@
 <resources>
-    <string name="app_name">ShibaCha_app</string>
-    <string name="login">LOGIN</string>
-    <string name="email">mail</string>
-    <string name="password">password</string>
+    <string name="app_name">ShibaCha</string>
+    <string name="ok_button">OK</string>
+    <string name="name_field">Name</string>
+    <string name="email_field">Email</string>
+    <string name="age_field">Age</string>
+    <string name="male_option">Male</string>
+    <string name="female_option">Female</string>
+    <string name="others_option">Others</string>
+    <string name="register_button">Register</string>
+    <string name="login_button">Login</string>
+<<<<<<< Updated upstream
+    <string name="password_field">Password</string>
+=======
+    <string name="search">Search</string>
+    <string name="home">Home</string>
+    <string name="favorite">Favorite</string>
+    <string name="profile">Profile</string>
+    <string name="setting">Setting</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="favorite_fragment">Favorite Fragment</string>
+    <string name="home_fragment">Home Fragment</string>
+    <string name="profile_fragment">Profile Fragment</string>
+    <string name="search_fragment">Search Fragment</string>
+    <string name="setting_fragment">Setting Fragment</string>
+>>>>>>> Stashed changes
 </resources>
