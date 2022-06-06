@@ -9,9 +9,7 @@
     <string name="others_option">Others</string>
     <string name="register_button">Register</string>
     <string name="login_button">Login</string>
-<<<<<<< Updated upstream
     <string name="password_field">Password</string>
-=======
     <string name="search">Search</string>
     <string name="home">Home</string>
     <string name="favorite">Favorite</string>
@@ -24,5 +22,5 @@
     <string name="profile_fragment">Profile Fragment</string>
     <string name="search_fragment">Search Fragment</string>
     <string name="setting_fragment">Setting Fragment</string>
->>>>>>> Stashed changes
+    <string name="hobbies_title">Hobbies</string>
 </resources>
