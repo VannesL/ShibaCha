@@ -1,17 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.HomeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/home_fragment"
-        android:textAlignment="center"
-        android:textSize="36sp"
-        android:textStyle="bold"/>
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:text="@string/home_fragment"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textSize="36sp"-->
+<!--        android:textStyle="bold"/>-->
 
-</FrameLayout>
+    <!--    The below textview uses a dummy text-->
+
+    <ImageView
+        android:id="@+id/community_img"
+        android:layout_width="300sp"
+        android:layout_height="400sp"
+        android:layout_marginTop="24dp"
+        android:background="@color/white"
+        android:src="@drawable/bijutsu_animal_neko"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/community_lbl"
+        android:layout_width="300sp"
+        android:layout_height="150sp"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/community_img"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:padding="10sp"
+        android:text="Name: PiCATsso\nDescription:\nMeow! Lets paint and share our art together! Meow!"/>
+
+
+    <Button
+        android:id="@+id/join_btn"
+        android:layout_width="350sp"
+        android:layout_height="60sp"
+        android:text="@string/join"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:backgroundTint="@color/blue_light"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/community_lbl" />
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_forward_blk"
+        app:layout_constraintBottom_toTopOf="@+id/join_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/community_img"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow_back_blk"
+        app:layout_constraintBottom_toTopOf="@+id/join_btn"
+        app:layout_constraintEnd_toStartOf="@+id/community_img"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
