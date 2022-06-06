@@ -2,11 +2,11 @@ package com.example.shibacha_app.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.shibacha_app.databinding.IntroBinding
+import com.example.shibacha_app.databinding.ActivityIntroBinding
 
 class IntroScreenActivity: AppCompatActivity() {
 
-    private lateinit var binding: IntroBinding
+    private lateinit var binding: ActivityIntroBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

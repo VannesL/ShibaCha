@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             regisState = GENDER
         }
         else {
-            Intent changeActivity = new Intent(applicationContext, )
+//            Intent changeActivity = new Intent(applicationContext, )
         }
     }
 
