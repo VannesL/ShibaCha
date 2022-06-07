@@ -28,7 +28,7 @@ class IntroActivity : AppCompatActivity() {
 
     //Login Button
     private fun gotoLogin() {
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
 }
