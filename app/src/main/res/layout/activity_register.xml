@@ -4,13 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ConfirmDetailsActivity">
+    tools:context=".activities.RegisterActivity">
+
+    <ImageView
+        android:id="@+id/tea_img"
+        android:layout_width="188dp"
+        android:layout_height="257dp"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/basic_tea" />
+
+    <ImageView
+        android:id="@+id/smoke_trail"
+        android:layout_width="283dp"
+        android:layout_height="239dp"
+        android:layout_marginBottom="190dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/smoke_trail" />
+
+    <ImageView
+        android:id="@+id/steam_bubble"
+        android:layout_width="700dp"
+        android:layout_height="1000dp"
+        android:layout_marginBottom="350dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/smoke_white" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/name_field"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="22dp"
         android:hint="@string/name_field"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +59,7 @@
         android:id="@+id/email_field"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="22dp"
         android:hint="@string/email_field"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +77,7 @@
         android:id="@+id/pass_field"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="22dp"
         android:hint="@string/password_field"
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +96,7 @@
         android:id="@+id/age_field"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="22dp"
         android:hint="@string/age_field"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -83,31 +114,38 @@
         android:id="@+id/gender_options"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="12dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/age_field">
 
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="Gender:"
+            android:textSize="18sp" />
+
         <RadioButton
             android:id="@+id/male_option"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="20dp"
+            android:layout_marginRight="10dp"
             android:text="@string/male_option"/>
 
         <RadioButton
             android:id="@+id/female_option"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="20dp"
+            android:layout_marginRight="10dp"
             android:text="@string/female_option"/>
 
         <RadioButton
             android:id="@+id/other_option"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="20dp"
             android:text="@string/others_option"/>
 
     </RadioGroup>

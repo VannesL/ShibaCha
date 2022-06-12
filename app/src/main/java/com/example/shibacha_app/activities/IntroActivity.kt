@@ -3,7 +3,6 @@ package com.example.shibacha_app.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.shibacha_app.R
 import com.example.shibacha_app.databinding.ActivityIntroBinding
 
 class IntroActivity : AppCompatActivity() {
@@ -22,7 +21,7 @@ class IntroActivity : AppCompatActivity() {
 
     //Register Button
     private fun gotoRegister() {
-        val intent = Intent(this, RegisActivity::class.java)
+        val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
     }
 

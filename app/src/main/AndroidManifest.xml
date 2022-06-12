@@ -22,9 +22,8 @@
         <activity android:name=".activities.HomeActivity" />
         <activity android:name=".activities.LoginActivity" />
         <activity
-            android:name=".activities.ConfirmDetailsActivity"
+            android:name=".activities.RegisterActivity"
             android:exported="false" />
-        <activity android:name=".activities.RegisActivity"></activity>
     </application>
 
 </manifest>
