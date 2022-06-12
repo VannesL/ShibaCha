@@ -70,7 +70,7 @@ class RegisterActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(this) {
             if (it.isSuccessful) {
                 binding.progressCircular.visibility = View.GONE
-                Toast.makeText(this, "Successfully Singed Up", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Successfully Signed Up", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, PickHobbiesActivity::class.java)
                 startActivity(intent)
                 finish()
