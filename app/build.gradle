@@ -3,11 +3,16 @@ plugins {
     id 'kotlin-android'
 }
 
+apply plugin: 'com.google.gms.google-services'
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
     defaultConfig {
+        configurations.all {
+            resolutionStrategy { force 'androidx.browser:browser:1.3.0' }
+        }
         applicationId "com.example.shibacha_app"
         minSdkVersion 23
         targetSdkVersion 30
@@ -44,7 +49,11 @@ dependencies {
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.0.5'
+    implementation 'com.google.firebase:firebase-database-ktx:20.0.5'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    implementation platform('com.google.firebase:firebase-bom:30.1.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 }
