@@ -66,14 +66,17 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
+        if (pass.length < 6) {
+            Toast.makeText(this, "Password must be 6 or more characters!" , Toast.LENGTH_SHORT).show()
+            binding.progressCircular.visibility = View.GONE
+            return
+        }
+
         //register user
         auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(this) {
             if (it.isSuccessful) {
                 binding.progressCircular.visibility = View.GONE
                 Toast.makeText(this, "Successfully Signed Up", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, PickHobbiesActivity::class.java)
-                startActivity(intent)
-                finish()
             } else {
                 Toast.makeText(this, "Sign Up Failed!", Toast.LENGTH_SHORT).show()
             }
