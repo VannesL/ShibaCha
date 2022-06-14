@@ -24,4 +24,9 @@
     <string name="setting_fragment">Setting Fragment</string>
     <string name="hobbies_title">Hobbies</string>
     <string name="join">JOIN +</string>
+    <string name="gender_header">Gender:</string>
+    <string name="desc_field">Enter Community Description</string>
+    <string name="comm_name_field">Enter Community Name</string>
+    <string name="image_field">Enter Image Link</string>
+    <string name="button_create">create</string>
 </resources>

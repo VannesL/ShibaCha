@@ -15,9 +15,8 @@
         <!-- Background -->
         <item name="android:windowBackground">@color/green_background</item>
         <!-- Text input fields outline style -->
-        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense</item>
         <!-- Radio Buttons -->
         <item name="radioButtonStyle">@style/Widget.ShibaCha.CompoundButton.RadioButton</item>
-<!--        <item name="colorAccent">@color/blue_light</item>-->
     </style>
 </resources>
