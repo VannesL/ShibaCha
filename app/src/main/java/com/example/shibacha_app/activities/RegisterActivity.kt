@@ -12,15 +12,23 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
+import com.example.shibacha_app.activities.HomeActivity
+import com.example.shibacha_app.activities.LoginActivity
 import com.example.shibacha_app.databinding.ActivityRegisterBinding
+import com.example.shibacha_app.models.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var firedb: FirebaseDatabase
+    private lateinit var dbref: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +36,11 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.okButton.setOnClickListener { registerUser() }
+
+        //Ref Databases
         auth = Firebase.auth
+        firedb = FirebaseDatabase.getInstance()
+        dbref = firedb.getReference()
 
         //remove keyboard on enter
         binding.nameField.setOnKeyListener {view, keyCode, _ -> handleKeyEvent(view, keyCode) }
@@ -48,20 +60,17 @@ class RegisterActivity : AppCompatActivity() {
         val age = binding.ageFieldText.text.toString()
         val genderId = binding.genderOptions.checkedRadioButtonId
 
-        //check if gender selected
-        if (genderId != -1) {
-            val gender:RadioButton = findViewById(genderId)
-        }
-        else {
-            Toast.makeText(this, "Please select a gender!" , Toast.LENGTH_SHORT).show()
-            binding.progressCircular.visibility = View.GONE
-            return
-        }
 //        Toast.makeText(this, "$username + $email + $pass + $age + ${gender.text}" , Toast.LENGTH_SHORT).show()
 
         //check values
         if (username.isBlank() || email.isBlank() || pass.isBlank() || age.isBlank()) {
             Toast.makeText(this, "Please fill in all the details!" , Toast.LENGTH_SHORT).show()
+            binding.progressCircular.visibility = View.GONE
+            return
+        }
+
+        if(!email.contains("@") || !email.contains(".com", ignoreCase = true)) {
+            Toast.makeText(this, "Email is invalid!" , Toast.LENGTH_SHORT).show()
             binding.progressCircular.visibility = View.GONE
             return
         }
@@ -72,15 +81,55 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
+        val gender: String
+        //check if gender selected
+        if (genderId != -1) {
+            gender = findViewById<RadioButton>(genderId).text as String
+        }
+        else {
+            Toast.makeText(this, "Please select a gender!" , Toast.LENGTH_SHORT).show()
+            binding.progressCircular.visibility = View.GONE
+            return
+        }
+
         //register user
         auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(this) {
             if (it.isSuccessful) {
                 binding.progressCircular.visibility = View.GONE
-                Toast.makeText(this, "Successfully Signed Up", Toast.LENGTH_SHORT).show()
+
+                //create user in database
+                //make user model
+                val userID = username
+
+                val user:UserModel = UserModel(username, email, pass, gender)
+
+                //add to database
+                dbref.child("Users").child(userID).setValue(user)
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Successfully Signed Up!", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, HomeActivity::class.java) 
+                        startActivity(intent)
+                        finish()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(this, "Error during creation", Toast.LENGTH_SHORT).show()
+                    }
+
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
             } else {
-                Toast.makeText(this, "Sign Up Failed!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Sign Up Failed", Toast.LENGTH_SHORT).show()
             }
         }
+
+
+//        if (success == 1) {
+//
+//        } else {
+////            Toast.makeText(this, "Sign Up Failed!", Toast.LENGTH_SHORT).show()
+//        }
+
 
         binding.progressCircular.visibility = View.GONE
         return

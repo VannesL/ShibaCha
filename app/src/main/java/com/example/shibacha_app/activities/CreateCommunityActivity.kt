@@ -13,8 +13,8 @@ import com.google.firebase.database.*
 class CreateCommunityActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateCommunityBinding
-    lateinit var firedb: FirebaseDatabase
-    lateinit var dbref: DatabaseReference
+    private lateinit var firedb: FirebaseDatabase
+    private lateinit var dbref: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
