@@ -107,7 +107,7 @@ class RegisterActivity : AppCompatActivity() {
                 dbref.child("Users").child(userID).setValue(user)
                     .addOnSuccessListener {
                         Toast.makeText(this, "Successfully Signed Up!", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this, HomeActivity::class.java) 
+                        val intent = Intent(this, HomeActivity::class.java)
                         startActivity(intent)
                         finish()
                     }

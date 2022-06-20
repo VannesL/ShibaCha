@@ -1,5 +1,6 @@
 package com.example.shibacha_app.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -27,7 +28,6 @@ class HomeActivity : AppCompatActivity() {
 //        setContentView(binding.root)
         replaceFragment(homeFragment)
         setNavigationListener()
-
     }
 
     private fun init(){

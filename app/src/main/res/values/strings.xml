@@ -29,4 +29,6 @@
     <string name="comm_name_field">Enter Community Name</string>
     <string name="image_field">Enter Image Link</string>
     <string name="button_create">create</string>
+    <string name="update_button">Update</string>
+    <string name="RVitem_name">Community Name</string>
 </resources>
