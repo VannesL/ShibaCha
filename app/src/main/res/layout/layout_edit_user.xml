@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/top_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/green_primary"
+        app:itemIconSize="36sp"
+        app:itemIconTint="@color/black"
+        app:labelVisibilityMode="unlabeled"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="99dp"
+        android:layout_height="31dp"
+        android:fontFamily="@font/baloothambi"
+        android:gravity="center_horizontal"
+        android:text="Account"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:typeface="normal"
+        tools:layout_editor_absoluteX="164dp"
+        tools:layout_editor_absoluteY="322dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/baloothambi"
+        android:gravity="center_horizontal"
+        android:text="Hobbies"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        tools:layout_editor_absoluteX="168dp"
+        tools:layout_editor_absoluteY="559dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:backgroundTint="#12009688"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:gravity="center_horizontal"
+        app:srcCompat="@drawable/account_image"
+        tools:layout_editor_absoluteX="150dp"
+        tools:layout_editor_absoluteY="186dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:backgroundTint="#12009688"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        android:gravity="center_horizontal"
+        app:srcCompat="@drawable/soccoerball_image"
+        tools:layout_editor_absoluteX="160dp"
+        tools:layout_editor_absoluteY="410dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

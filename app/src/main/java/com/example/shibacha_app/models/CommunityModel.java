@@ -4,24 +4,30 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class CommunityModel implements Parcelable {
+    private String communityId;
     private String communityName;
     private String communityDesc;
     private String communityImg;
+    private String categories;
+    private Integer communityMembers;
 
     public CommunityModel() {
 
     }
 
-    public CommunityModel(String communityName, String communityDesc, String communityImg) {
+    public CommunityModel(String communityId, String communityName, String communityDesc, String communityImg) {
+        this.communityId = communityId;
         this.communityName = communityName;
         this.communityDesc = communityDesc;
         this.communityImg = communityImg;
+        this.communityMembers = 1;
     }
 
     protected CommunityModel(Parcel in) {
         communityName = in.readString();
         communityDesc = in.readString();
         communityImg = in.readString();
+        communityMembers = in.readInt();
     }
 
     public static final Creator<CommunityModel> CREATOR = new Creator<CommunityModel>() {
@@ -60,6 +66,10 @@ public class CommunityModel implements Parcelable {
         this.communityImg = communityImg;
     }
 
+    public Integer getCommunityMembers() { return communityMembers; }
+
+    public void setCommunityMembers(Integer communityMembers) { this.communityMembers = communityMembers; }
+
     @Override
     public int describeContents() {
         return 0;
@@ -70,5 +80,7 @@ public class CommunityModel implements Parcelable {
         parcel.writeString(communityName);
         parcel.writeString(communityDesc);
         parcel.writeString(communityImg);
+        parcel.writeInt(communityMembers);
     }
+
 }

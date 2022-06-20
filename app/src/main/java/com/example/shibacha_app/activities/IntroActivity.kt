@@ -3,6 +3,7 @@ package com.example.shibacha_app.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.shibacha_app.databinding.ActivityIntroBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -41,7 +42,8 @@ class IntroActivity : AppCompatActivity() {
         super.onStart()
         val user: FirebaseUser? = auth.currentUser
         if(user != null) {
-            val intent = Intent(this, HomeActivity::class.java)
+            Toast.makeText(this, "Already logged in!", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, MyCommunitiesActivity::class.java)
             startActivity(intent)
             finish()
         }

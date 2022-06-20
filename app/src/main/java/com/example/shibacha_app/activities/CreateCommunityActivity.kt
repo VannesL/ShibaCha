@@ -13,8 +13,8 @@ import com.google.firebase.database.*
 class CreateCommunityActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateCommunityBinding
-    lateinit var firedb: FirebaseDatabase
-    lateinit var dbref: DatabaseReference
+    private lateinit var firedb: FirebaseDatabase
+    private lateinit var dbref: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,13 +37,13 @@ class CreateCommunityActivity : AppCompatActivity() {
 
         //initialize object
         val communityID = name
-        val community:CommunityModel = CommunityModel(name, desc, imagelink)
+        val community:CommunityModel = CommunityModel(communityID, name, desc, imagelink)
 
         //add to database
         dbref.child(communityID).setValue(community)
             .addOnSuccessListener {
                 Toast.makeText(this, "Successfully Added to Database", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, HomeActivity::class.java)
+                val intent = Intent(this, MyCommunitiesActivity::class.java)
                 startActivity(intent)
                 finish()
             }
