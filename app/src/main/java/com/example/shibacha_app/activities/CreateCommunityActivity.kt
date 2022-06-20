@@ -37,13 +37,13 @@ class CreateCommunityActivity : AppCompatActivity() {
 
         //initialize object
         val communityID = name
-        val community:CommunityModel = CommunityModel(name, desc, imagelink)
+        val community:CommunityModel = CommunityModel(communityID, name, desc, imagelink)
 
         //add to database
         dbref.child(communityID).setValue(community)
             .addOnSuccessListener {
                 Toast.makeText(this, "Successfully Added to Database", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, HomeActivity::class.java)
+                val intent = Intent(this, MyCommunitiesActivity::class.java)
                 startActivity(intent)
                 finish()
             }

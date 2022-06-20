@@ -38,14 +38,14 @@ class IntroActivity : AppCompatActivity() {
     }
 
     //Check if user is already authenticated
-//    override fun onStart() {
-//        super.onStart()
-//        val user: FirebaseUser? = auth.currentUser
-//        if(user != null) {
-//            Toast.makeText(this, "Already logged in!", Toast.LENGTH_SHORT).show()
-//            val intent = Intent(this, HomeActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        }
-//    }
+    override fun onStart() {
+        super.onStart()
+        val user: FirebaseUser? = auth.currentUser
+        if(user != null) {
+            Toast.makeText(this, "Already logged in!", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, MyCommunitiesActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
 }
