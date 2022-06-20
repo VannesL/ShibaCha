@@ -8,25 +8,28 @@ public class CommunityModel implements Parcelable {
     private String communityName;
     private String communityDesc;
     private String communityImg;
-    private String categories;
+    private String communityCategory;
     private Integer communityMembers;
 
     public CommunityModel() {
 
     }
 
-    public CommunityModel(String communityId, String communityName, String communityDesc, String communityImg) {
+    public CommunityModel(String communityId, String communityName, String communityDesc, String communityImg, String communityCategory) {
         this.communityId = communityId;
         this.communityName = communityName;
         this.communityDesc = communityDesc;
         this.communityImg = communityImg;
+        this.communityCategory = communityCategory;
         this.communityMembers = 1;
     }
 
     protected CommunityModel(Parcel in) {
+        communityId = in.readString();
         communityName = in.readString();
         communityDesc = in.readString();
         communityImg = in.readString();
+        communityCategory = in.readString();
         communityMembers = in.readInt();
     }
 
@@ -41,6 +44,14 @@ public class CommunityModel implements Parcelable {
             return new CommunityModel[size];
         }
     };
+
+    public String getCommunityId() {
+        return communityId;
+    }
+
+    public void setCommunityId(String communityId) {
+        this.communityId = communityId;
+    }
 
     public String getCommunityName() {
         return communityName;
@@ -66,6 +77,14 @@ public class CommunityModel implements Parcelable {
         this.communityImg = communityImg;
     }
 
+    public String getCommunityCategory() {
+        return communityCategory;
+    }
+
+    public void setCommunityCategory(String communityCategory) {
+        this.communityCategory = communityCategory;
+    }
+
     public Integer getCommunityMembers() { return communityMembers; }
 
     public void setCommunityMembers(Integer communityMembers) { this.communityMembers = communityMembers; }
@@ -77,10 +96,11 @@ public class CommunityModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(communityId);
         parcel.writeString(communityName);
         parcel.writeString(communityDesc);
         parcel.writeString(communityImg);
+        parcel.writeString(communityCategory);
         parcel.writeInt(communityMembers);
     }
-
 }
