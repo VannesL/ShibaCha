@@ -32,11 +32,11 @@ class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    var carouselView:CarouselView? = null
-
-    private var fireDB: FirebaseDatabase? = null
-    private var dbRef: DatabaseReference? = null
-    private var communityList: ArrayList<CommunityModel?>? = null
+//    var carouselView:CarouselView? = null
+//
+//    private var fireDB: FirebaseDatabase? = null
+//    private var dbRef: DatabaseReference? = null
+//    private var communityList: ArrayList<CommunityModel?>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,52 +45,52 @@ class HomeFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         //
-        fireDB = FirebaseDatabase.getInstance()
-        dbRef = fireDB!!.getReference("Communities")
+//        fireDB = FirebaseDatabase.getInstance()
+//        dbRef = fireDB!!.getReference("Communities")
 
-        allCommunities
-
-        carouselView = view?.findViewById(R.id.carouselView)
-        carouselView!!.pageCount = communityList?.size!!
-        carouselView!!.setImageListener(imageListener)
+//        allCommunities
+//
+//        carouselView = view?.findViewById(R.id.carouselView)
+//        carouselView!!.pageCount = communityList?.size!!
+//        carouselView!!.setImageListener(imageListener)
 
 
         //
     }
 
-    var imageListener = object :ImageListener{
-        override fun setImageForPosition(position: Int, imageView: ImageView?) {
-            Picasso.get().load(communityList?.get(position)?.communityImg).into(imageView)
-        }
+//    var imageListener = object :ImageListener{
+//        override fun setImageForPosition(position: Int, imageView: ImageView?) {
+//            Picasso.get().load(communityList?.get(position)?.communityImg).into(imageView)
+//        }
+//
+//    }
 
-    }
-
-    private val allCommunities: Unit
-        private get() {
-            communityList!!.clear()
-            dbRef!!.addChildEventListener(object : ChildEventListener {
-                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    // add the value from the model
-                    communityList!!.add(snapshot.getValue(CommunityModel::class.java))
-                    // notify new addition
-//                    communityRVAdapter!!.notifyDataSetChanged()
-                }
-
-                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-//                    communityRVAdapter!!.notifyDataSetChanged()
-                }
-
-                override fun onChildRemoved(snapshot: DataSnapshot) {
-//                    communityRVAdapter!!.notifyDataSetChanged()
-                }
-
-                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-//                    communityRVAdapter!!.notifyDataSetChanged()
-                }
-
-                override fun onCancelled(error: DatabaseError) {}
-            })
-        }
+//    private val allCommunities: Unit
+//        private get() {
+//            communityList!!.clear()
+//            dbRef!!.addChildEventListener(object : ChildEventListener {
+//                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+//                    // add the value from the model
+//                    communityList!!.add(snapshot.getValue(CommunityModel::class.java))
+//                    // notify new addition
+////                    communityRVAdapter!!.notifyDataSetChanged()
+//                }
+//
+//                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+////                    communityRVAdapter!!.notifyDataSetChanged()
+//                }
+//
+//                override fun onChildRemoved(snapshot: DataSnapshot) {
+////                    communityRVAdapter!!.notifyDataSetChanged()
+//                }
+//
+//                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+////                    communityRVAdapter!!.notifyDataSetChanged()
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {}
+//            })
+//        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
