@@ -83,4 +83,10 @@ public class CommunityRVAdapter extends RecyclerView.Adapter<CommunityRVAdapter.
     public interface CommunityClickInterface {
         void onCommunityClick(int position);
     }
+
+    //Filter the list shown
+    public void filterList(ArrayList<CommunityModel> filteredList) {
+        communityList = filteredList;
+        this.notifyDataSetChanged();
+    }
 }
