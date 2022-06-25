@@ -4,24 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.SearchCommunityActivity">
-
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/search_name_field"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="22dp"-->
-<!--        android:layout_marginLeft="15dp"-->
-<!--        android:layout_marginRight="15dp"-->
-<!--        android:hint="@string/name_field">-->
-
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/search_name_field_text"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:inputType="text" />-->
-
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
+    tools:context=".activities.SearchCommunityActivity">z
 
     <EditText
         android:id="@+id/search_name_field"
