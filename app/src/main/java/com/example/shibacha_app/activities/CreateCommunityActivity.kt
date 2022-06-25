@@ -3,15 +3,19 @@ package com.example.shibacha_app.activities
 import android.R
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
-import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.shibacha_app.databinding.ActivityCreateCommunityBinding
 import com.example.shibacha_app.models.CommunityModel
 import com.google.firebase.database.*
+import com.squareup.picasso.Picasso
 
 
 class CreateCommunityActivity : AppCompatActivity() {
@@ -21,6 +25,7 @@ class CreateCommunityActivity : AppCompatActivity() {
     private lateinit var dbref: DatabaseReference
     private lateinit var dbrefSpinner: DatabaseReference
     private lateinit var categoryList: ArrayList<String>
+    private lateinit var imageField: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,18 +61,48 @@ class CreateCommunityActivity : AppCompatActivity() {
         binding.buttonCreate.setOnClickListener{ createCommunity() }
 
         //Exit TextBox
-        binding.imgFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
+        binding.imgField.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
         binding.commNameFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
         binding.descFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
 
+        //Display Image
+        binding.imgField.addTextChangedListener( object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                Log.d("Test", "Image")
+                if (s != null) {
+                    displayImg(s.toString())
+                }
+            }
+
+        })
+
+    }
+
+    private fun displayImg(s: String) {
+        if(s != null) {
+            Picasso.get().load(s).into(binding.communityImg)
+        }
     }
 
     private fun createCommunity() {
         //get details
         val name = binding.commNameFieldText.text.toString()
-        val imagelink = binding.imgFieldText.text.toString()
+        val imagelink = binding.imgField.text.toString()
         val desc = binding.descFieldText.text.toString()
         val category = binding.categoryField.selectedItem.toString()
+
+        //validate
+        if (name.isBlank() || imagelink.isBlank() || desc.isBlank()) {
+            Toast.makeText(this, "Please fill in all the details!" , Toast.LENGTH_SHORT).show()
+            binding.progressCircular.visibility = View.GONE
+            return
+        }
 
         //initialize object
         val communityID = name
