@@ -17,6 +17,9 @@
             android:exported="false" />
         <activity android:name=".activities.CreateCommunityActivity"/>
         <activity
+            android:name=".activities.SearchCommunityActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.PickHobbiesActivity"
             android:exported="false" />
         <activity android:name=".activities.IntroActivity">
