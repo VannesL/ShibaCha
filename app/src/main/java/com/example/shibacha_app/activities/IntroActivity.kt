@@ -43,7 +43,7 @@ class IntroActivity : AppCompatActivity() {
         val user: FirebaseUser? = auth.currentUser
         if(user != null) {
             Toast.makeText(this, "Already logged in!", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MyCommunitiesActivity::class.java)
+            val intent = Intent(this, SearchCommunityActivity::class.java)
             startActivity(intent)
             finish()
         }

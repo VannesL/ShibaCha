@@ -15,17 +15,18 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shibacha_app.R
 import com.example.shibacha_app.adapters.CommunityRVAdapter
+import com.example.shibacha_app.adapters.CommunitySearchRVAdapter
 import com.example.shibacha_app.databinding.ActivitySearchCommunityBinding
 import com.example.shibacha_app.models.CommunityModel
 import com.google.firebase.database.*
 
-class SearchCommunityActivity : AppCompatActivity(), CommunityRVAdapter.CommunityClickInterface {
+class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.CommunityClickInterface {
     private lateinit var binding: ActivitySearchCommunityBinding
     lateinit var firedb: FirebaseDatabase
     lateinit var dbref: DatabaseReference
     private lateinit var communityList: ArrayList<CommunityModel>
     private lateinit var filteredList: ArrayList<CommunityModel>
-    private lateinit var mCommunityRVAdapter: CommunityRVAdapter
+    private lateinit var mCommunityRVAdapter: CommunitySearchRVAdapter
     private lateinit var communityRV: RecyclerView
     private lateinit var searchBar: EditText
 
@@ -41,7 +42,7 @@ class SearchCommunityActivity : AppCompatActivity(), CommunityRVAdapter.Communit
         // initialize values
         communityRV = findViewById(R.id.recycler_view)
         communityList = arrayListOf<CommunityModel>()
-        mCommunityRVAdapter = CommunityRVAdapter(communityList, this, this)
+        mCommunityRVAdapter = CommunitySearchRVAdapter(communityList, this, this)
 
         // set how to display recycler view
         communityRV.layoutManager = GridLayoutManager(this, 2)
