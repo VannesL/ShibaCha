@@ -2,15 +2,23 @@ package com.example.shibacha_app.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ViewFlipper
 import com.example.shibacha_app.R
+import com.example.shibacha_app.activities.HomeActivity
 import com.example.shibacha_app.activities.MyCommunitiesActivity
+import com.example.shibacha_app.adapters.CommunityRVAdapter
 import com.example.shibacha_app.models.CommunityModel
 import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import com.synnapps.carouselview.CarouselView
 import com.synnapps.carouselview.ImageListener
@@ -31,6 +39,13 @@ class HomeFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private lateinit var viewFlipper: ViewFlipper
+    private var communityList: java.util.ArrayList<CommunityModel?>? = null
+    private var communityRVAdapter: CommunityRVAdapter? = null
+    private var dbRef: DatabaseReference? = null
+    val db = Firebase.firestore
+    private lateinit var fStore: FirebaseFirestore
 
 //    var carouselView:CarouselView? = null
 //
@@ -55,7 +70,20 @@ class HomeFragment : Fragment() {
 //        carouselView!!.setImageListener(imageListener)
 
 
+
         //
+    }
+
+    private fun slideImages(img: ImageView){
+
+        viewFlipper.addView(img)
+        viewFlipper.flipInterval = 3000
+        viewFlipper.isAutoStart = true
+
+        viewFlipper.setInAnimation(activity, android.R.anim.slide_in_left)
+        viewFlipper.setOutAnimation(activity, android.R.anim.slide_out_right)
+
+
     }
 
 //    var imageListener = object :ImageListener{
@@ -96,9 +124,105 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        // Write a message to the database
+//        val fireDB = Firebase.database
+//        dbRef = fireDB!!.getReference("Communities")
+        communityList = java.util.ArrayList()
+        fStore = FirebaseFirestore.getInstance()
+
+        viewFlipper = requireView().findViewById(R.id.carouselFlipper)
+
+        var query = fStore.collection("TestCollection")
+        query
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+
+                    val id = document.id
+                    var imgLink = document.getString("CommunityImageLink")!!
+                    Log.d("Debugging", imgLink)
+
+                    //
+                    var imageView: ImageView = ImageView(activity)
+                    Picasso.get().load(imgLink).into(imageView)
+                    if (imageView != null) {
+                        slideImages(imageView)
+                    }
+                    //
+
+                    Log.d("Debugging", "hello")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("Warning", "Error getting documents.", exception)
+            }
+
+        Log.d("Debugging",db.collection("TestCollection").get().toString())
+
+//        allCommunities
+
+//        val images = IntArray(2)
+//        images[0] = R.drawable.bijutsu_animal_neko
+//        images[1] = R.drawable.basic_tea
+
+
+
+
+//        var i: Int = 0;
+//        for (comm in communityList!!){
+//
+//            var imageView: ImageView? = null
+//            Picasso.get().load(communityList?.get(i)?.communityImg).into(imageView)
+//            if (imageView != null) {
+//                slideImages(imageView)
+//            }
+//            i = i+1
+//        }
+
+//        var imageView: ImageView = ImageView(activity)
+//        Picasso.get().load("https://images.emojiterra.com/google/noto-emoji/v2.034/512px/26bd.png").into(imageView)
+//        slideImages(imageView)
+
+    }
+
+    private val allCommunities: Unit
+        private get() {
+            communityList!!.clear()
+            dbRef!!.addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    // add the value from the model
+                    communityList!!.add(snapshot.getValue(CommunityModel::class.java))
+                    Log.d("debugging", "test")
+                    // notify new addition
+//                    communityRVAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+//                    communityRVAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+//                    communityRVAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+//                    communityRVAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("debugging", "test")
+                }
+            })
+        }
 
     companion object {
         /**

@@ -16,17 +16,29 @@
 
     <!--    The below textview uses a dummy text-->
 
-    <ImageView
-        android:id="@+id/community_img"
+    <ViewFlipper
+        android:id="@+id/carouselFlipper"
         android:layout_width="300sp"
         android:layout_height="400sp"
         android:layout_marginTop="24dp"
         android:background="@color/white"
-        android:src="@drawable/bijutsu_animal_neko"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+<!--    <ImageView-->
+<!--        android:id="@+id/community_img"-->
+<!--        android:layout_width="300sp"-->
+<!--        android:layout_height="400sp"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:background="@color/white"-->
+<!--        android:src="@drawable/bijutsu_animal_neko"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.504"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
 <!--    <com.synnapps.carouselview.CarouselView-->
 <!--        android:id="@+id/carouselView"-->
@@ -51,7 +63,7 @@
             android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/community_img"
+            app:layout_constraintTop_toBottomOf="@+id/carouselFlipper"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -73,22 +85,22 @@
             app:layout_constraintTop_toBottomOf="@+id/community_lbl" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/next_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_forward_blk"
             app:layout_constraintBottom_toTopOf="@+id/join_btn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/community_img"
+            app:layout_constraintStart_toEndOf="@+id/carouselFlipper"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/prev_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_arrow_back_blk"
             app:layout_constraintBottom_toTopOf="@+id/join_btn"
-            app:layout_constraintEnd_toStartOf="@+id/community_img"
+            app:layout_constraintEnd_toStartOf="@+id/carouselFlipper"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
