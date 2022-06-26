@@ -43,7 +43,7 @@ public class CommunitySearchRVAdapter extends RecyclerView.Adapter<CommunitySear
     public void onBindViewHolder(@NonNull CommunitySearchRVAdapter.ViewHolder holder, int position) {
         CommunityModel communityItem = communityList.get(position);
         holder.communityName.setText(communityItem.getCommunityName());
-        holder.communityMember.setText(communityItem.getCommunityMembers());
+        holder.communityMember.setText(communityItem.getCommunityMembers().toString());
         Picasso.get().load(communityItem.getCommunityImg()).into(holder.communityDP);
         setAnimation(holder.itemView, position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -85,5 +85,11 @@ public class CommunitySearchRVAdapter extends RecyclerView.Adapter<CommunitySear
 
     public interface CommunityClickInterface {
         void onCommunityClick(int position);
+    }
+
+    //Filter the list shown
+    public void filterList(ArrayList<CommunityModel> filteredList) {
+        communityList = filteredList;
+        this.notifyDataSetChanged();
     }
 }
