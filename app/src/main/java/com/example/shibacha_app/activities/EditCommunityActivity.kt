@@ -1,20 +1,26 @@
 package com.example.shibacha_app.activities
 
+import android.R
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.Toast
-import com.example.shibacha_app.R
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import com.example.shibacha_app.databinding.ActivityEditCommunityBinding
 import com.example.shibacha_app.models.CommunityModel
 import com.google.firebase.database.*
+
 
 class EditCommunityActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditCommunityBinding
     private lateinit var firedb: FirebaseDatabase
     private lateinit var dbref: DatabaseReference
+    private lateinit var dbrefSpinner: DatabaseReference
+    private lateinit var categoryList: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,33 +31,76 @@ class EditCommunityActivity : AppCompatActivity() {
         firedb = FirebaseDatabase.getInstance()
         val communityModel = intent.getParcelableExtra<CommunityModel>("community")
         var communityID: String = ""
+
+        dbref = firedb.getReference("Communities").child(communityID)
+
+        //get categories
+        dbrefSpinner = firedb.getReference("Categories")
+
+        dbrefSpinner.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                categoryList = ArrayList()
+                for (categorySnapshot in dataSnapshot.children) {
+                    val categoryName = categorySnapshot.child("categoryName").getValue(String::class.java)
+                    if (categoryName != null) {
+                        categoryList.add(categoryName)
+                    }
+                }
+                val categorySpinner = binding.categoryField
+                val categoriesAdapter = ArrayAdapter(this@EditCommunityActivity, R.layout.simple_spinner_item, categoryList)
+                categoriesAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+                categorySpinner.adapter = categoriesAdapter
+
+                //Select the category
+                val value = communityModel?.communityCategory
+                val pos  = categoryList.indexOf(value)
+                binding.categoryField.setSelection(pos)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        //set values
         if (communityModel != null) {
             binding.commNameFieldText.setText(communityModel.communityName)
             binding.imgFieldText.setText(communityModel.communityImg)
             binding.descFieldText.setText(communityModel.communityDesc)
-            //TODO: set categories too
-
             communityID = communityModel.communityName
         }
 
-        dbref = firedb.getReference("Communities").child(communityID)
-        binding.buttonUpdate.setOnClickListener{ editCommunity() }
-        binding.buttonDelete.setOnClickListener{ deleteCommunity() }
+        //Set button logic
+        binding.buttonUpdate.setOnClickListener{
+            if (communityModel != null) {
+                editCommunity(communityModel)
+            }
+        }
+        binding.buttonDelete.setOnClickListener{
+            if (communityModel != null) {
+                deleteCommunity(communityModel)
+            }
+        }
+
+        //Exit TextBox
+        binding.imgFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
+        binding.commNameFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
+        binding.descFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
 
     }
 
-    private fun editCommunity() {
+    private fun editCommunity(communityModel: CommunityModel) {
         //get details
         val name = binding.commNameFieldText.text.toString()
         val imagelink = binding.imgFieldText.text.toString()
         val desc = binding.descFieldText.text.toString()
+        val category = binding.categoryField.selectedItem.toString()
 
         //initialize object
-        val communityID = name
-        val community:CommunityModel = CommunityModel(communityID, name, desc, imagelink)
+        val communityID = communityModel.communityId
+        val community:CommunityModel = CommunityModel(communityID, name, desc, imagelink, category)
 
         //add to database
-        dbref.setValue(community)
+        dbref = firedb.getReference("Communities")
+        dbref.child(communityID).setValue(community)
             .addOnSuccessListener {
                 Toast.makeText(this, "Successfully Updated to Database", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MyCommunitiesActivity::class.java)
@@ -65,11 +114,25 @@ class EditCommunityActivity : AppCompatActivity() {
         return
     }
 
-    private fun deleteCommunity() {
+    private fun deleteCommunity( communityModel: CommunityModel ) {
+        dbref = firedb.getReference("Communities").child(communityModel.communityId)
         dbref.removeValue()
         Toast.makeText(this, "Successfully deleted Community", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, MyCommunitiesActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    //remove keyboard
+    private fun hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    //check if edittext in focus
+    private fun OnFocusChangeListener (v : View, hasfocus: Boolean) {
+        if (!hasfocus) {
+            hideKeyboard(v)
+        }
     }
 }

@@ -1,20 +1,26 @@
 package com.example.shibacha_app.activities
 
+import android.R
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import android.view.View.OnFocusChangeListener
+import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.Toast
-import com.example.shibacha_app.R
+import androidx.appcompat.app.AppCompatActivity
 import com.example.shibacha_app.databinding.ActivityCreateCommunityBinding
 import com.example.shibacha_app.models.CommunityModel
 import com.google.firebase.database.*
+
 
 class CreateCommunityActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateCommunityBinding
     private lateinit var firedb: FirebaseDatabase
     private lateinit var dbref: DatabaseReference
+    private lateinit var dbrefSpinner: DatabaseReference
+    private lateinit var categoryList: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +31,34 @@ class CreateCommunityActivity : AppCompatActivity() {
         firedb = FirebaseDatabase.getInstance()
         dbref = firedb.getReference("Communities")
 
+        //get categories
+        dbrefSpinner = firedb.getReference("Categories")
+
+        dbrefSpinner.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                categoryList = ArrayList()
+                for (categorySnapshot in dataSnapshot.children) {
+                    val categoryName = categorySnapshot.child("categoryName").getValue(String::class.java)
+                    if (categoryName != null) {
+                        categoryList.add(categoryName)
+                    }
+                }
+                val categorySpinner = binding.categoryField
+                val categoriesAdapter = ArrayAdapter(this@CreateCommunityActivity, R.layout.simple_spinner_item, categoryList)
+                categoriesAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+                categorySpinner.adapter = categoriesAdapter
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+
+        //Button Logic
         binding.buttonCreate.setOnClickListener{ createCommunity() }
+
+        //Exit TextBox
+        binding.imgFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
+        binding.commNameFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
+        binding.descFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
 
     }
 
@@ -34,10 +67,11 @@ class CreateCommunityActivity : AppCompatActivity() {
         val name = binding.commNameFieldText.text.toString()
         val imagelink = binding.imgFieldText.text.toString()
         val desc = binding.descFieldText.text.toString()
+        val category = binding.categoryField.selectedItem.toString()
 
         //initialize object
         val communityID = name
-        val community:CommunityModel = CommunityModel(communityID, name, desc, imagelink)
+        val community:CommunityModel = CommunityModel(communityID, name, desc, imagelink, category)
 
         //add to database
         dbref.child(communityID).setValue(community)
@@ -52,5 +86,18 @@ class CreateCommunityActivity : AppCompatActivity() {
             }
 
         return
+    }
+
+    //remove keyboard
+    private fun hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    //check if edittext in focus
+    private fun OnFocusChangeListener (v : View, hasfocus: Boolean) {
+        if (!hasfocus) {
+            hideKeyboard(v)
+        }
     }
 }
