@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/top_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/green_primary"
+        app:itemIconSize="36sp"
+        app:itemIconTint="@color/black"
+        app:labelVisibilityMode="unlabeled"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu" />
+
+
+    <ImageButton
+        android:id="@+id/imageButton5"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:backgroundTint="#12009688"
+        android:gravity="center_horizontal"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.222"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/baseball_animal_usagi"
+        tools:layout_editor_absoluteY="134dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton6"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:backgroundTint="#12009688"
+        android:gravity="center_horizontal"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.787"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/bijutsu_animal_neko"
+        tools:layout_editor_absoluteY="134dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton7"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:backgroundTint="#12009688"
+        android:gravity="center_horizontal"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.222"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/soccer_animal_kuma"
+        tools:layout_editor_absoluteY="310dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton8"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:backgroundTint="#12009688"
+        android:gravity="center_horizontal"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.787"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/tennis_animal_inu"
+        tools:layout_editor_absoluteY="310dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton9"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:backgroundTint="#12009688"
+        android:gravity="center_horizontal"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.222"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/animal_music_band"
+        tools:layout_editor_absoluteY="486dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton10"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:backgroundTint="#12009688"
+        android:gravity="center_horizontal"
+        android:padding="0dp"
+        android:scaleType="fitCenter"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.787"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/jitensya_tanuki"
+        tools:layout_editor_absoluteY="486dp" />
+
+    <Button
+        android:id="@+id/ok_button"
+        android:layout_width="259dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="@font/baloothambi"
+        android:text="@string/ok_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
