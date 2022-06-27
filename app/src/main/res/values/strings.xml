@@ -31,4 +31,6 @@
     <string name="button_create">create</string>
     <string name="update_button">Update</string>
     <string name="RVitem_name">Community Name</string>
+    <string name="description">Description:</string>
+    <string name="name">Name:</string>
 </resources>
