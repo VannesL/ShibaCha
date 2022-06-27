@@ -40,6 +40,8 @@
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.171" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/drawable/border.xml" value="0.1" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/drawable/border_big.xml" value="0.242" />
+        <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/drawable/border_head.xml" value="0.238" />
+        <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/drawable/border_layout.xml" value="0.238" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/drawable/border_samll.xml" value="0.242" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/drawable/btn_login.xml" value="0.171" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/drawable/ic_arrow_forward_blk.xml" value="0.171" />
@@ -61,17 +63,20 @@
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/activity_management_account.xml" value="0.13496376811594202" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/activity_management_account01.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/activity_management_account_home.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/activity_manegement_accoun_editt.xml" value="0.15830800405268491" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/activity_manegement_account_edit.xml" value="0.22" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/activity_my_communities.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/activity_pick_hobbies.xml" value="0.26766304347826086" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/activity_register.xml" value="0.21557971014492755" />
-        <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/community_rv_item.xml" value="0.16145833333333334" />
+        <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/community_rv_item.xml" value="0.5" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/fragment_favorite.xml" value="0.21557971014492755" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/fragment_home.xml" value="0.21557971014492755" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/fragment_profile.xml" value="0.21557971014492755" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/fragment_search.xml" value="0.21557971014492755" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/fragment_setting.xml" value="0.21557971014492755" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/layout_edit_user.xml" value="0.16145833333333334" />
+        <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/layout_edit_user02.xml" value="0.3333333333333333" />
+        <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/layout/layout_edit_user03.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/menu/menu.xml" value="0.16145833333333334" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1705" />
         <entry key="..\:/Users/shuya/AndroidStudioProjects/ShibaCha/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1705" />

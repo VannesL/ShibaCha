@@ -7,9 +7,10 @@
     tools:context=".activities.HomeActivity">
 
     <TableLayout
+        android:id="@+id/tableLayout"
         android:layout_width="300dp"
         android:layout_height="280dp"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="90dp"
         android:background="@drawable/border_thick"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
@@ -89,7 +90,7 @@
                 android:background="@drawable/border_thick"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
-                android:text="name"
+                android:text="e-mail"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
@@ -119,7 +120,7 @@
                 android:background="@drawable/border_thick"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
-                android:text="name"
+                android:text="age"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
@@ -149,38 +150,7 @@
                 android:background="@drawable/border_thick"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
-                android:text="name"
-                android:textColor="#000000"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="3"
-                android:background="@drawable/border_thin"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:textColor="#000000"
-                android:textSize="20sp" />
-
-
-        </TableRow>
-
-
-        <TableRow
-
-            >
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:background="@drawable/border_thick"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center"
-                android:text="name"
+                android:text="gender"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
@@ -211,7 +181,38 @@
                 android:background="@drawable/border_thick"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
-                android:text="name"
+                android:text="dep"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="3"
+                android:background="@drawable/border_thin"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+
+        </TableRow>
+
+
+        <TableRow
+
+            >
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/border_thick"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:text="role"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
@@ -238,8 +239,46 @@
         android:layout_height="wrap_content"
         android:text="back"
         android:textSize="25"
-        tools:layout_editor_absoluteX="152dp"
-        tools:layout_editor_absoluteY="648dp" />
+        tools:layout_editor_absoluteX="149dp"
+        tools:layout_editor_absoluteY="640dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="300dp"
+        android:layout_height="205dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="396dp"
+        android:background="@drawable/border_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="83dp"
+            android:layout_height="45dp"
+            android:text="TextView"
+            android:gravity="center"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="43dp" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit"
+            tools:layout_editor_absoluteX="103dp"
+            tools:layout_editor_absoluteY="129dp" />
+
+        <EditText
+            android:id="@+id/editTextTextPersonName"
+            android:layout_width="135dp"
+            android:layout_height="45dp"
+            android:ems="10"
+            android:gravity="left"
+            android:inputType="textPersonName"
+            android:text="Name"
+            tools:layout_editor_absoluteX="149dp"
+            tools:layout_editor_absoluteY="43dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
