@@ -1,11 +1,29 @@
 package com.example.shibacha_app.fragments
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.*
 import com.example.shibacha_app.R
+import com.example.shibacha_app.activities.HomeActivity
+import com.example.shibacha_app.activities.MyCommunitiesActivity
+import com.example.shibacha_app.adapters.CommunityRVAdapter
+import com.example.shibacha_app.models.CommunityModel
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
+import com.synnapps.carouselview.CarouselView
+import com.synnapps.carouselview.ImageListener
+import java.util.*
+import kotlin.collections.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,6 +40,17 @@ class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var viewFlipper: ViewFlipper
+    private lateinit var btnPrev: ImageButton
+    private lateinit var btnNext: ImageButton
+    private lateinit var lblCommName: TextView
+    private lateinit var lblCommDesc: TextView
+    private var communityList: java.util.ArrayList<CommunityModel?>? = null
+    private var dbRef: DatabaseReference? = null
+    private var carouselIdx = 0
+//    val db = Firebase.firestore
+//    private lateinit var fStore: FirebaseFirestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -30,13 +59,134 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun slideImages(img: ImageView){
+
+        viewFlipper.addView(img)
+        viewFlipper.isAutoStart = false
+
+        viewFlipper.setInAnimation(activity, android.R.anim.fade_in)
+        viewFlipper.setOutAnimation(activity, android.R.anim.fade_out)
+
+    }
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        init()
+
+        // Write a message to the database
+        val fireDB = Firebase.database
+        dbRef = fireDB.getReference("Communities")
+        communityList = java.util.ArrayList()
+//        fStore = FirebaseFirestore.getInstance()
+
+//        var query = fStore.collection("TestCollection")
+//        query
+//            .get()
+//            .addOnSuccessListener { result ->
+//                for (document in result) {
+//
+//                    val id = document.id
+//                    var imgLink = document.getString("CommunityImageLink")!!
+//                    Log.d("Debugging", imgLink)
+//
+//                    //
+//                    var imageView: ImageView = ImageView(activity)
+//                    Picasso.get().load(imgLink).into(imageView)
+//                    if (imageView != null) {
+//                        slideImages(imageView)
+//                    }
+//                    //
+//
+//                    Log.d("Debugging", "hello")
+//                }
+//            }
+//            .addOnFailureListener { exception ->
+//                Log.w("Warning", "Error getting documents.", exception)
+//            }
+
+        allCommunities
+
+    }
+
+    private fun init(){
+        viewFlipper = requireView().findViewById(R.id.carouselFlipper)
+        btnNext = requireView().findViewById(R.id.next_btn)
+        btnPrev = requireView().findViewById(R.id.prev_btn)
+        lblCommName = requireView().findViewById(R.id.community_lbl)
+        lblCommDesc = requireView().findViewById(R.id.comm_desc_lbl)
+
+        btnNext.setOnClickListener{ goToNext() }
+        btnPrev.setOnClickListener { goToPrev() }
+    }
+
+    private fun goToNext(){
+        viewFlipper.showNext()
+        carouselIdx = ( carouselIdx + 1 ) % (communityList?.size!!)
+        updateText()
+
+    }
+    private fun goToPrev(){
+        viewFlipper.showPrevious()
+        carouselIdx = ( carouselIdx + 1 ) % (communityList?.size!!)
+        updateText()
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateText(){
+        lblCommName.text = "Name: " + communityList!!.get(carouselIdx)?.communityName.toString()
+        lblCommDesc.text = "Description: \n" + communityList!!.get(carouselIdx)?.communityDesc.toString()
+    }
+
+    private val allCommunities: Unit
+        private get() {
+            communityList!!.clear()
+            dbRef!!.addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    // add the value from the model
+
+                    var comm = snapshot.getValue(CommunityModel::class.java)
+                    communityList!!.add(comm)
+                    var imageView = ImageView(activity)
+                    var imgLink = comm?.communityImg.toString()
+                    Log.d("Debugging", imgLink)
+                    Picasso.get().load(imgLink).into(imageView)
+                    slideImages(imageView)
+                    updateText()
+//                    Log.d("debugging", communityList!!.get(0)?.communityImg.toString())
+                    // notify new addition
+//                    communityRVAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+//                    communityRVAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+//                    communityRVAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+//                    communityRVAdapter!!.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.d("debugging", "testa")
+                }
+            })
+        }
 
     companion object {
         /**
