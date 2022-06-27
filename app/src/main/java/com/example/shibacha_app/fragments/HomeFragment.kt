@@ -3,6 +3,7 @@ package com.example.shibacha_app.fragments
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,7 +14,9 @@ import com.example.shibacha_app.R
 import com.example.shibacha_app.activities.HomeActivity
 import com.example.shibacha_app.activities.MyCommunitiesActivity
 import com.example.shibacha_app.adapters.CommunityRVAdapter
+import com.example.shibacha_app.models.CommunityMemberModel
 import com.example.shibacha_app.models.CommunityModel
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,6 +27,7 @@ import com.synnapps.carouselview.CarouselView
 import com.synnapps.carouselview.ImageListener
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.random.Random.Default.nextInt
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,6 +49,7 @@ class HomeFragment : Fragment() {
     private lateinit var btnNext: ImageButton
     private lateinit var lblCommName: TextView
     private lateinit var lblCommDesc: TextView
+    private lateinit var btnJoin: Button
     private var communityList: java.util.ArrayList<CommunityModel?>? = null
     private var dbRef: DatabaseReference? = null
     private var carouselIdx = 0
@@ -127,9 +132,42 @@ class HomeFragment : Fragment() {
         btnPrev = requireView().findViewById(R.id.prev_btn)
         lblCommName = requireView().findViewById(R.id.community_lbl)
         lblCommDesc = requireView().findViewById(R.id.comm_desc_lbl)
+        btnJoin = requireView().findViewById(R.id.join_btn)
 
         btnNext.setOnClickListener{ goToNext() }
         btnPrev.setOnClickListener { goToPrev() }
+        btnJoin.setOnClickListener { joinCommunity() }
+    }
+
+    private fun joinCommunity(){
+        val commId = communityList!!.get(carouselIdx)?.communityId.toString()
+        val user = Firebase.auth.currentUser
+        val email = user?.email
+        var commSize = communityList!!.get(carouselIdx)?.communityMembers
+
+        val fireDB = Firebase.database
+        val dbRefJoin = fireDB.getReference("CommunityMembers")
+
+        val commMember = CommunityMemberModel(commId, email)
+
+        val uniqueId = commId + commSize.toString()
+
+        if (commSize != null) {
+            commSize = commSize + 1
+        }
+
+        dbRef?.child(commId)?.child("communityMembers")?.setValue(commSize)
+
+        dbRefJoin.child(uniqueId).setValue(commMember)
+            .addOnSuccessListener {
+                Toast.makeText(context, "Successfully join the community", Toast.LENGTH_SHORT).show()
+                val intent = Intent(context, MyCommunitiesActivity::class.java)
+                startActivity(intent)
+            }
+            .addOnFailureListener {
+                Toast.makeText(context, "Failed to join the community", Toast.LENGTH_SHORT).show()
+            }
+
     }
 
     private fun goToNext(){
