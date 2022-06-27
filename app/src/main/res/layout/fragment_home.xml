@@ -59,7 +59,7 @@
         <TextView
             android:id="@+id/community_lbl"
             android:layout_width="300sp"
-            android:layout_height="150sp"
+            android:layout_height="50sp"
             android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,21 +68,34 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:padding="10sp"
-            android:text="Name: PiCATsso\nDescription:\nMeow! Lets paint and share our art together! Meow!"/>
+            android:text="@string/name"/>
 
-
-        <Button
-            android:id="@+id/join_btn"
-            android:layout_width="350sp"
-            android:layout_height="60sp"
-            android:text="@string/join"
-            android:textStyle="bold"
-            android:textSize="30sp"
-            android:backgroundTint="@color/blue_light"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <TextView
+            android:id="@+id/comm_desc_lbl"
+            android:layout_width="300sp"
+            android:layout_height="110sp"
+            android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/community_lbl" />
+            app:layout_constraintTop_toBottomOf="@+id/community_lbl"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:padding="10sp"
+            android:text="@string/description"/>
+
+    <Button
+        android:id="@+id/join_btn"
+        android:layout_width="350sp"
+        android:layout_height="60sp"
+        android:backgroundTint="@color/blue_light"
+        android:text="@string/join"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/comm_desc_lbl" />
 
         <ImageButton
             android:id="@+id/next_btn"
