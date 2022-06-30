@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.shibacha_app.databinding.ActivityCreateCommunityBinding
 import com.example.shibacha_app.models.CommunityModel
 import com.google.firebase.database.*
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 
 
@@ -23,9 +25,8 @@ class CreateCommunityActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateCommunityBinding
     private lateinit var firedb: FirebaseDatabase
     private lateinit var dbref: DatabaseReference
-    private lateinit var dbrefSpinner: DatabaseReference
     private lateinit var categoryList: ArrayList<String>
-    private lateinit var imageField: EditText
+    val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,25 +38,21 @@ class CreateCommunityActivity : AppCompatActivity() {
         dbref = firedb.getReference("Communities")
 
         //get categories
-        dbrefSpinner = firedb.getReference("Categories")
+//        dbrefSpinner = firedb.getReference("Categories")
 
-        dbrefSpinner.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                categoryList = ArrayList()
-                for (categorySnapshot in dataSnapshot.children) {
-                    val categoryName = categorySnapshot.child("categoryName").getValue(String::class.java)
-                    if (categoryName != null) {
-                        categoryList.add(categoryName)
-                    }
+        val dbSpin = Firebase.firestore
+        categoryList = ArrayList()
+        dbSpin.collection("Categories")
+            .get()
+            .addOnSuccessListener { res ->
+                for (doc in res){
+                    categoryList.add(doc.getString("CategoryName").toString())
                 }
                 val categorySpinner = binding.categoryField
                 val categoriesAdapter = ArrayAdapter(this@CreateCommunityActivity, R.layout.simple_spinner_item, categoryList)
                 categoriesAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
                 categorySpinner.adapter = categoriesAdapter
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
 
         //Button Logic
         binding.buttonCreate.setOnClickListener{ createCommunity() }
@@ -106,10 +103,10 @@ class CreateCommunityActivity : AppCompatActivity() {
 
         //initialize object
         val communityID = name
-        val community:CommunityModel = CommunityModel(communityID, name, desc, imagelink, category)
+        val community = CommunityModel(communityID, name, desc, imagelink, category)
 
         //add to database
-        dbref.child(communityID).setValue(community)
+        db.collection("Communities").add(community)
             .addOnSuccessListener {
                 Toast.makeText(this, "Successfully Added to Database", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MyCommunitiesActivity::class.java)

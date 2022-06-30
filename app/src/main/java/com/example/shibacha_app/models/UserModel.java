@@ -10,7 +10,6 @@ public class UserModel implements Parcelable {
     private String email;
     private String password;
     private String gender;
-    private String[] hobbies;
 
     public UserModel() {
 
@@ -74,14 +73,6 @@ public class UserModel implements Parcelable {
         this.gender = gender;
     }
 
-    public String[] getHobbies() {
-        return hobbies;
-    }
-
-    public void setHobbies(String[] hobbies) {
-        this.hobbies = hobbies;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -93,6 +84,5 @@ public class UserModel implements Parcelable {
         parcel.writeString(email);
         parcel.writeString(password);
         parcel.writeString(gender);
-        parcel.writeArray(hobbies);
     }
 }

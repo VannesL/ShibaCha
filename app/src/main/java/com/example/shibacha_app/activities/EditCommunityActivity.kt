@@ -16,6 +16,8 @@ import com.example.shibacha_app.databinding.ActivityEditCommunityBinding
 import com.example.shibacha_app.models.CommunityModel
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class EditCommunityActivity : AppCompatActivity() {
@@ -39,30 +41,45 @@ class EditCommunityActivity : AppCompatActivity() {
         dbref = firedb.getReference("Communities").child(communityID)
 
         //get categories
-        dbrefSpinner = firedb.getReference("Categories")
+//        dbrefSpinner = firedb.getReference("Categories")
 
-        dbrefSpinner.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                categoryList = ArrayList()
-                for (categorySnapshot in dataSnapshot.children) {
-                    val categoryName = categorySnapshot.child("categoryName").getValue(String::class.java)
-                    if (categoryName != null) {
-                        categoryList.add(categoryName)
-                    }
+        val dbSpin = Firebase.firestore
+        categoryList = ArrayList()
+        dbSpin.collection("Categories")
+            .get()
+            .addOnSuccessListener { res ->
+                for (doc in res){
+                    categoryList.add(doc.getString("CategoryName").toString())
+//                    Log.d("Debugging", categoryList[0])
                 }
                 val categorySpinner = binding.categoryField
                 val categoriesAdapter = ArrayAdapter(this@EditCommunityActivity, R.layout.simple_spinner_item, categoryList)
                 categoriesAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
                 categorySpinner.adapter = categoriesAdapter
-
-                //Select the category
-                val value = communityModel?.communityCategory
-                val pos  = categoryList.indexOf(value)
-                binding.categoryField.setSelection(pos)
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
+//        dbrefSpinner.addValueEventListener(object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                categoryList = ArrayList()
+//                for (categorySnapshot in dataSnapshot.children) {
+//                    val categoryName = categorySnapshot.child("categoryName").getValue(String::class.java)
+//                    if (categoryName != null) {
+//                        categoryList.add(categoryName)
+//                    }
+//                }
+//                val categorySpinner = binding.categoryField
+//                val categoriesAdapter = ArrayAdapter(this@EditCommunityActivity, R.layout.simple_spinner_item, categoryList)
+//                categoriesAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+//                categorySpinner.adapter = categoriesAdapter
+//
+//                //Select the category
+//                val value = communityModel?.communityCategory
+//                val pos  = categoryList.indexOf(value)
+//                binding.categoryField.setSelection(pos)
+//            }
+//
+//            override fun onCancelled(databaseError: DatabaseError) {}
+//        })
 
         //set values
         if (communityModel != null) {
