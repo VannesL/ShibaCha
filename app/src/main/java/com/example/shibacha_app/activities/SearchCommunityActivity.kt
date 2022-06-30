@@ -1,6 +1,7 @@
 package com.example.shibacha_app.activities
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,6 +19,7 @@ import com.example.shibacha_app.adapters.CommunityRVAdapter
 import com.example.shibacha_app.adapters.CommunitySearchRVAdapter
 import com.example.shibacha_app.databinding.ActivitySearchCommunityBinding
 import com.example.shibacha_app.models.CommunityModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 
 class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.CommunityClickInterface {
@@ -67,6 +69,16 @@ class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.Co
             }
         })
 //        searchCommunity()
+        val back: FloatingActionButton = findViewById(R.id.back_button)
+        back.setOnClickListener{
+            startActivity(
+                Intent(
+                    this,
+                    HomeActivity::class.java
+                )
+            )
+        }
+
         getAllCommunities()
     }
 

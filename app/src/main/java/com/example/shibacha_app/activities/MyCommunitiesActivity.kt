@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +40,7 @@ class MyCommunitiesActivity : AppCompatActivity(), CommunityClickInterface {
         // initialize values
         communityRV = findViewById(R.id.recycler_view)
         addCommunity = findViewById(R.id.add_community_button)
+        val back: FloatingActionButton = findViewById(R.id.back_button)
         fireDB = FirebaseDatabase.getInstance()
         dbRef = fireDB!!.getReference("Communities")
         communityList = ArrayList()
@@ -58,6 +60,15 @@ class MyCommunitiesActivity : AppCompatActivity(), CommunityClickInterface {
                 )
             )
         })
+        back.setOnClickListener{
+            startActivity(
+                Intent(
+                    this@MyCommunitiesActivity,
+                    HomeActivity::class.java
+                )
+            )
+        }
+
         allCommunities
     }// add the value from the model
 

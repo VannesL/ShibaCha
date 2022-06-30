@@ -1,11 +1,14 @@
 package com.example.shibacha_app.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.shibacha_app.R
+import com.example.shibacha_app.activities.MyCommunitiesActivity
+import com.example.shibacha_app.activities.SearchCommunityActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +31,9 @@ class SearchFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+        val intent = Intent (getActivity(), SearchCommunityActivity::class.java)
+        getActivity()?.startActivity(intent)
     }
 
     override fun onCreateView(

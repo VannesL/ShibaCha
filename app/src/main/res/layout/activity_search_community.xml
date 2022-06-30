@@ -23,4 +23,13 @@
         tools:spanCount="2"
         tools:layoutManager="GridLayoutManager" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/green_primary"
+        android:src="@drawable/ic_back" />
+
 </LinearLayout>
