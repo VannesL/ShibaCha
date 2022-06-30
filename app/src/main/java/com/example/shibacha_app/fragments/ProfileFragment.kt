@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioButton
+import android.widget.Toast
 import com.example.shibacha_app.R
+import com.example.shibacha_app.models.UserModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -77,14 +79,19 @@ class ProfileFragment : Fragment() {
                 nameField.setText(documentSnapshot.getString("username"))
                 emailField.setText(documentSnapshot.getString("email"))
                 passwordField.setText(documentSnapshot.getString("password"))
+                ageField.setText(documentSnapshot.get("age").toString())
 
-                if(documentSnapshot.getString("gender") == "Male"){
+
+//                documentSnapshot.getString("gender")?.let { Log.d("test", it) }
+
+                if(documentSnapshot.getString("gender").equals("Male")){
                     rbGenderMale.isChecked = true
+
                 }
-                else if(documentSnapshot.getString("gender") == "Female"){
+                else if(documentSnapshot.getString("gender").equals("Female")){
                     rbGenderFemale.isChecked = true
                 }
-                else if(documentSnapshot.getString("gender") == "Other"){
+                else if(documentSnapshot.getString("gender").equals("Others")){
                     rbGenderOther.isChecked = true
                 }
 
@@ -110,6 +117,38 @@ class ProfileFragment : Fragment() {
         rbGenderOther = requireView().findViewById(R.id.other_option)
         btnEditProfile = requireView().findViewById(R.id.edit_profile_button)
 
+        btnEditProfile.setOnClickListener { editProfile() }
+
+    }
+
+    private fun editProfile(){
+
+        var username = nameField.text.toString()
+        var email = emailField.text.toString()
+        var pass = passwordField.text.toString()
+        var gender = ""
+        if (rbGenderMale.isChecked){
+            gender = "Male"
+        }
+        else if (rbGenderFemale.isChecked){
+            gender = "Female"
+        }
+        else if (rbGenderOther.isChecked){
+            gender = "Others"
+        }
+        var age = ageField.text.toString()
+
+        val uid = fAuth.currentUser?.uid
+        val documentReference = uid?.let { it1 -> fStore.collection("Users").document(it1) };
+
+        val user: UserModel = UserModel(username, email, pass, gender, age.toInt())
+
+        if (documentReference != null) {
+            documentReference.set(user).addOnSuccessListener {
+                //                    Log.d("TAG", "user profile is created for $userID")
+                Toast.makeText(context, "Profile Successfully Updated", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     companion object {

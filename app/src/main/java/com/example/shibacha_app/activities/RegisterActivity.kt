@@ -134,7 +134,7 @@ class RegisterActivity : AppCompatActivity() {
                 val uid = auth.currentUser?.uid
                 val documentReference = uid?.let { it1 -> db.collection("Users").document(it1) };
 
-                val user:UserModel = UserModel(username, email, pass, gender)
+                val user:UserModel = UserModel(username, email, pass, gender, age.toInt())
 
                 if (documentReference != null) {
                     documentReference.set(user).addOnSuccessListener {
