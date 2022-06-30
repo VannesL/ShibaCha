@@ -33,4 +33,9 @@
     <string name="RVitem_name">Community Name</string>
     <string name="description">Description:</string>
     <string name="name">Name:</string>
+
+    <string name="community_list">Community List</string>
+    <string name="chat_community_name">Community Name</string>
+    <string name="community_info">Community Info</string>
+    <string name="header_chat_nav_title">Channels</string>
 </resources>
