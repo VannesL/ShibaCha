@@ -15,6 +15,7 @@ import androidx.core.view.get
 import com.example.shibacha_app.databinding.ActivityEditCommunityBinding
 import com.example.shibacha_app.models.CommunityModel
 import com.google.firebase.database.*
+import com.google.firebase.firestore.DocumentReference
 import com.squareup.picasso.Picasso
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -25,8 +26,8 @@ class EditCommunityActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditCommunityBinding
     private lateinit var firedb: FirebaseDatabase
     private lateinit var dbref: DatabaseReference
-    private lateinit var dbrefSpinner: DatabaseReference
     private lateinit var categoryList: ArrayList<String>
+    val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +40,6 @@ class EditCommunityActivity : AppCompatActivity() {
         var communityID: String = ""
 
         dbref = firedb.getReference("Communities").child(communityID)
-
-        //get categories
-//        dbrefSpinner = firedb.getReference("Categories")
 
         val dbSpin = Firebase.firestore
         categoryList = ArrayList()
@@ -58,36 +56,13 @@ class EditCommunityActivity : AppCompatActivity() {
                 categorySpinner.adapter = categoriesAdapter
             }
 
-//        dbrefSpinner.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                categoryList = ArrayList()
-//                for (categorySnapshot in dataSnapshot.children) {
-//                    val categoryName = categorySnapshot.child("categoryName").getValue(String::class.java)
-//                    if (categoryName != null) {
-//                        categoryList.add(categoryName)
-//                    }
-//                }
-//                val categorySpinner = binding.categoryField
-//                val categoriesAdapter = ArrayAdapter(this@EditCommunityActivity, R.layout.simple_spinner_item, categoryList)
-//                categoriesAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
-//                categorySpinner.adapter = categoriesAdapter
-//
-//                //Select the category
-//                val value = communityModel?.communityCategory
-//                val pos  = categoryList.indexOf(value)
-//                binding.categoryField.setSelection(pos)
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {}
-//        })
-
         //set values
         if (communityModel != null) {
             binding.commNameFieldText.setText(communityModel.communityName)
             binding.imgFieldText.setText(communityModel.communityImg)
             Picasso.get().load(communityModel.communityImg).into(binding.communityImg)
             binding.descFieldText.setText(communityModel.communityDesc)
-            communityID = communityModel.communityName
+            communityID = communityModel.communityId
         }
 
         //Set button logic
@@ -148,11 +123,10 @@ class EditCommunityActivity : AppCompatActivity() {
 
         //initialize object
         val communityID = communityModel.communityId
-        val community:CommunityModel = CommunityModel(communityID, name, desc, imagelink, category)
+        val community = CommunityModel(communityID, name, desc, imagelink, category)
 
         //add to database
-        dbref = firedb.getReference("Communities")
-        dbref.child(communityID).setValue(community)
+        db.collection("Communities").document(communityID).set(community)
             .addOnSuccessListener {
                 Toast.makeText(this, "Successfully Updated to Database", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MyCommunitiesActivity::class.java)
@@ -167,12 +141,16 @@ class EditCommunityActivity : AppCompatActivity() {
     }
 
     private fun deleteCommunity( communityModel: CommunityModel ) {
-        dbref = firedb.getReference("Communities").child(communityModel.communityId)
-        dbref.removeValue()
-        Toast.makeText(this, "Successfully deleted Community", Toast.LENGTH_SHORT).show()
-        val intent = Intent(this, MyCommunitiesActivity::class.java)
-        startActivity(intent)
-        finish()
+        db.collection("Communities").document(communityModel.communityId).delete()
+            .addOnSuccessListener {
+                Toast.makeText(this, "Successfully deleted Community", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MyCommunitiesActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to delete Community", Toast.LENGTH_SHORT).show()
+            }
     }
 
     //remove keyboard

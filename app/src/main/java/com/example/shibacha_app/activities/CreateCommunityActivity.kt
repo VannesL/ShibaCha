@@ -102,11 +102,12 @@ class CreateCommunityActivity : AppCompatActivity() {
         }
 
         //initialize object
-        val communityID = name
+        val document = db.collection("Communities").document()
+        val communityID = document.id
         val community = CommunityModel(communityID, name, desc, imagelink, category)
 
         //add to database
-        db.collection("Communities").add(community)
+        document.set(community)
             .addOnSuccessListener {
                 Toast.makeText(this, "Successfully Added to Database", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MyCommunitiesActivity::class.java)
