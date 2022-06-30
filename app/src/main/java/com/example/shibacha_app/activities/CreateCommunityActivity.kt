@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
@@ -37,9 +38,6 @@ class CreateCommunityActivity : AppCompatActivity() {
         firedb = FirebaseDatabase.getInstance()
         dbref = firedb.getReference("Communities")
 
-        //get categories
-//        dbrefSpinner = firedb.getReference("Categories")
-
         val dbSpin = Firebase.firestore
         categoryList = ArrayList()
         dbSpin.collection("Categories")
@@ -47,6 +45,7 @@ class CreateCommunityActivity : AppCompatActivity() {
             .addOnSuccessListener { res ->
                 for (doc in res){
                     categoryList.add(doc.getString("CategoryName").toString())
+//                    Log.d("Debugging", categoryList[0])
                 }
                 val categorySpinner = binding.categoryField
                 val categoriesAdapter = ArrayAdapter(this@CreateCommunityActivity, R.layout.simple_spinner_item, categoryList)
