@@ -54,6 +54,11 @@ class EditCommunityActivity : AppCompatActivity() {
                 val categoriesAdapter = ArrayAdapter(this@EditCommunityActivity, R.layout.simple_spinner_item, categoryList)
                 categoriesAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
                 categorySpinner.adapter = categoriesAdapter
+
+                //Select the category
+                val value = communityModel?.communityCategory
+                val pos  = categoryList.indexOf(value)
+                binding.categoryField.setSelection(pos)
             }
 
         //set values
