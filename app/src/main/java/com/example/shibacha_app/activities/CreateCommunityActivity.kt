@@ -3,6 +3,7 @@ package com.example.shibacha_app.activities
 import android.R
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.InputMethodManager
@@ -12,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.shibacha_app.databinding.ActivityCreateCommunityBinding
 import com.example.shibacha_app.models.CommunityModel
 import com.google.firebase.database.*
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class CreateCommunityActivity : AppCompatActivity() {
@@ -32,16 +35,16 @@ class CreateCommunityActivity : AppCompatActivity() {
         dbref = firedb.getReference("Communities")
 
         //get categories
-        dbrefSpinner = firedb.getReference("Categories")
+//        dbrefSpinner = firedb.getReference("Categories")
 
-        dbrefSpinner.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                categoryList = ArrayList()
-                for (categorySnapshot in dataSnapshot.children) {
-                    val categoryName = categorySnapshot.child("categoryName").getValue(String::class.java)
-                    if (categoryName != null) {
-                        categoryList.add(categoryName)
-                    }
+        val dbSpin = Firebase.firestore
+        categoryList = ArrayList()
+        dbSpin.collection("Categories")
+            .get()
+            .addOnSuccessListener { res ->
+                for (doc in res){
+                    categoryList.add(doc.getString("CategoryName").toString())
+//                    Log.d("Debugging", categoryList[0])
                 }
                 val categorySpinner = binding.categoryField
                 val categoriesAdapter = ArrayAdapter(this@CreateCommunityActivity, R.layout.simple_spinner_item, categoryList)
@@ -49,8 +52,24 @@ class CreateCommunityActivity : AppCompatActivity() {
                 categorySpinner.adapter = categoriesAdapter
             }
 
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
+
+//        dbrefSpinner.addValueEventListener(object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                categoryList = ArrayList()
+//                for (categorySnapshot in dataSnapshot.children) {
+//                    val categoryName = categorySnapshot.child("categoryName").getValue(String::class.java)
+//                    if (categoryName != null) {
+//                        categoryList.add(categoryName)
+//                    }
+//                }
+//                val categorySpinner = binding.categoryField
+//                val categoriesAdapter = ArrayAdapter(this@CreateCommunityActivity, R.layout.simple_spinner_item, categoryList)
+//                categoriesAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+//                categorySpinner.adapter = categoriesAdapter
+//            }
+//
+//            override fun onCancelled(databaseError: DatabaseError) {}
+//        })
 
         //Button Logic
         binding.buttonCreate.setOnClickListener{ createCommunity() }
