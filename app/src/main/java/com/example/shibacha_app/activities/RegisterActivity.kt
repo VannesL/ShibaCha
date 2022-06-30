@@ -101,7 +101,9 @@ class RegisterActivity : AppCompatActivity() {
 
                 //create user in database
                 //make user model
+                val userID = username
 
+                val user:UserModel = UserModel(username, email, pass, gender)
 
                 //add to database
 //                dbref.child("Users").child(userID).setValue(user)
@@ -114,35 +116,22 @@ class RegisterActivity : AppCompatActivity() {
 //                    .addOnFailureListener {
 //                        Toast.makeText(this, "Error during creation", Toast.LENGTH_SHORT).show()
 //                    }
-
-
                 val db = Firebase.firestore
-//                db.collection("Users")
-//                    .add(user)
-//                    .addOnSuccessListener { documentReference ->
-//                        Log.d("Debugging", "Successfully added to database")
-//                        Toast.makeText(this, "Successfully Signed Up!", Toast.LENGTH_SHORT).show()
-//                        val intent = Intent(this, HomeActivity::class.java)
-//                        startActivity(intent)
-//                        finish()
-//                    }
-//                    .addOnSuccessListener {
-//                        Log.w("Warning", "Error adding to database")
-//                        Toast.makeText(this, "Error during creation", Toast.LENGTH_SHORT).show()
-//                    }
-
-                val uid = auth.currentUser?.uid
-                val documentReference = uid?.let { it1 -> db.collection("Users").document(it1) };
-
-                val user:UserModel = UserModel(username, email, pass, gender)
-
-                if (documentReference != null) {
-                    documentReference.set(user).addOnSuccessListener {
-            //                    Log.d("TAG", "user profile is created for $userID")
+                db.collection("Users")
+                    .add(user)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d("Debugging", "Successfully added to database")
+                        Toast.makeText(this, "Successfully Signed Up!", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, HomeActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     }
-                }
+                    .addOnSuccessListener {
+                        Log.w("Warning", "Error adding to database")
+                        Toast.makeText(this, "Error during creation", Toast.LENGTH_SHORT).show()
+                    }
 
-                val intent = Intent(this, HomeActivity::class.java)
+                val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {
