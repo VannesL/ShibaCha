@@ -2,6 +2,7 @@ package com.example.shibacha_app.activities
 
 import android.R
 import android.content.Intent
+import android.icu.lang.UCharacter.GraphemeClusterBreak.L
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,7 +15,9 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.shibacha_app.databinding.ActivityCreateCommunityBinding
+import com.example.shibacha_app.models.CommunityMemberModel
 import com.example.shibacha_app.models.CommunityModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -28,6 +31,7 @@ class CreateCommunityActivity : AppCompatActivity() {
     private lateinit var dbref: DatabaseReference
     private lateinit var categoryList: ArrayList<String>
     val db = Firebase.firestore
+    private lateinit var fAuth : FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,20 +74,13 @@ class CreateCommunityActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                Log.d("Test", "Image")
-                if (s != null) {
-                    displayImg(s.toString())
+                if (s.toString() != "") {
+                    Picasso.get().load(s.toString()).into(binding.communityImg)
                 }
             }
 
         })
 
-    }
-
-    private fun displayImg(s: String) {
-        if(s != null) {
-            Picasso.get().load(s).into(binding.communityImg)
-        }
     }
 
     private fun createCommunity() {
@@ -104,17 +101,32 @@ class CreateCommunityActivity : AppCompatActivity() {
         val document = db.collection("Communities").document()
         val communityID = document.id
         val community = CommunityModel(communityID, name, desc, imagelink, category)
+        Log.d("Test", "here")
 
         //add to database
         document.set(community)
             .addOnSuccessListener {
-                Toast.makeText(this, "Successfully Added to Database", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Successfully Added Community to Database", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MyCommunitiesActivity::class.java)
                 startActivity(intent)
                 finish()
             }
             .addOnFailureListener {
-                Toast.makeText(this, "Failed to add to Database", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to add Community to Database", Toast.LENGTH_SHORT).show()
+            }
+
+        fAuth = FirebaseAuth.getInstance()
+        val uid = fAuth.currentUser?.uid
+        val communityMember = CommunityMemberModel(communityID, uid, "Owner")
+        db.collection("CommunityMembers").add(communityMember)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Successfully Added CommunityMember to Database", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MyCommunitiesActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to add CommunityMember to Database", Toast.LENGTH_SHORT).show()
             }
 
         return

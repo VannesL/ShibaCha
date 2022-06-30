@@ -156,17 +156,17 @@ class HomeFragment : Fragment() {
             commSize = commSize + 1
         }
 
-        dbRef?.child(commId)?.child("communityMembers")?.setValue(commSize)
-
-        dbRefJoin.child(uniqueId).setValue(commMember)
-            .addOnSuccessListener {
-                Toast.makeText(context, "Successfully join the community", Toast.LENGTH_SHORT).show()
-                val intent = Intent(context, MyCommunitiesActivity::class.java)
-                startActivity(intent)
-            }
-            .addOnFailureListener {
-                Toast.makeText(context, "Failed to join the community", Toast.LENGTH_SHORT).show()
-            }
+//        dbRef?.child(commId)?.child("communityMembers")?.setValue(commSize)
+//
+//        dbRefJoin.child(uniqueId).setValue(commMember)
+//            .addOnSuccessListener {
+//                Toast.makeText(context, "Successfully join the community", Toast.LENGTH_SHORT).show()
+//                val intent = Intent(context, MyCommunitiesActivity::class.java)
+//                startActivity(intent)
+//            }
+//            .addOnFailureListener {
+//                Toast.makeText(context, "Failed to join the community", Toast.LENGTH_SHORT).show()
+//            }
 
     }
 

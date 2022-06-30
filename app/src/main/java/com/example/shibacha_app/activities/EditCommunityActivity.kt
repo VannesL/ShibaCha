@@ -14,8 +14,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import com.example.shibacha_app.databinding.ActivityEditCommunityBinding
 import com.example.shibacha_app.models.CommunityModel
+import com.google.android.gms.tasks.Task
 import com.google.firebase.database.*
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.squareup.picasso.Picasso
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -83,7 +86,7 @@ class EditCommunityActivity : AppCompatActivity() {
         }
 
         //Exit TextBox
-        binding.imgFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
+        binding.imgField.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
         binding.commNameFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
         binding.descFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
 
@@ -96,20 +99,13 @@ class EditCommunityActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                Log.d("Test", "Image")
-                if (s != null) {
-                    displayImg(s.toString())
+                if (s.toString() != "") {
+                    Picasso.get().load(s.toString()).into(binding.communityImg)
                 }
             }
 
         })
 
-    }
-
-    private fun displayImg(s: String) {
-        if(s != null) {
-            Picasso.get().load(s).into(binding.communityImg)
-        }
     }
 
     private fun editCommunity(communityModel: CommunityModel) {
@@ -156,6 +152,16 @@ class EditCommunityActivity : AppCompatActivity() {
             .addOnFailureListener {
                 Toast.makeText(this, "Failed to delete Community", Toast.LENGTH_SHORT).show()
             }
+
+        val query = db.collection("CommunityMembers").whereEqualTo("communityId", communityModel.communityId).get()
+        query.addOnSuccessListener {
+            for (document in it) {
+                db.collection("CommunityMembers").document(document.id).delete()
+            }
+        }
+
+
+
     }
 
     //remove keyboard
