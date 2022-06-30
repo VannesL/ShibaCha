@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -21,6 +22,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class RegisterActivity : AppCompatActivity() {
@@ -104,14 +106,28 @@ class RegisterActivity : AppCompatActivity() {
                 val user:UserModel = UserModel(username, email, pass, gender)
 
                 //add to database
-                dbref.child("Users").child(userID).setValue(user)
-                    .addOnSuccessListener {
+//                dbref.child("Users").child(userID).setValue(user)
+//                    .addOnSuccessListener {
+//                        Toast.makeText(this, "Successfully Signed Up!", Toast.LENGTH_SHORT).show()
+//                        val intent = Intent(this, HomeActivity::class.java)
+//                        startActivity(intent)
+//                        finish()
+//                    }
+//                    .addOnFailureListener {
+//                        Toast.makeText(this, "Error during creation", Toast.LENGTH_SHORT).show()
+//                    }
+                val db = Firebase.firestore
+                db.collection("Users")
+                    .add(user)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d("Debugging", "Successfully added to database")
                         Toast.makeText(this, "Successfully Signed Up!", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, HomeActivity::class.java)
                         startActivity(intent)
                         finish()
                     }
-                    .addOnFailureListener {
+                    .addOnSuccessListener {
+                        Log.w("Warning", "Error adding to database")
                         Toast.makeText(this, "Error during creation", Toast.LENGTH_SHORT).show()
                     }
 
