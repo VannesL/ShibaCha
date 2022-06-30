@@ -1,11 +1,21 @@
 package com.example.shibacha_app.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.RadioButton
 import com.example.shibacha_app.R
+import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
+
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -21,6 +31,19 @@ class ProfileFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var nameField : TextInputEditText
+    private lateinit var emailField : TextInputEditText
+    private lateinit var passwordField : TextInputEditText
+    private lateinit var ageField : TextInputEditText
+    private lateinit var rbGenderMale : RadioButton
+    private lateinit var rbGenderFemale : RadioButton
+    private lateinit var rbGenderOther : RadioButton
+    private lateinit var btnEditProfile : Button
+
+    private lateinit var fAuth : FirebaseAuth
+    private lateinit var fStore : FirebaseFirestore
+    private lateinit var currUser : FirebaseUser
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -33,6 +56,60 @@ class ProfileFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        init()
+        fillInitialData()
+
+    }
+
+    private fun fillInitialData(){
+        val documentRef = fStore.collection("Users").document(currUser.uid)
+
+        val documentListener =  documentRef.addSnapshotListener { documentSnapshot, _ ->
+
+
+            if (documentSnapshot != null && documentSnapshot!!.exists()) {
+
+                nameField.setText(documentSnapshot.getString("username"))
+                emailField.setText(documentSnapshot.getString("email"))
+                passwordField.setText(documentSnapshot.getString("password"))
+
+                if(documentSnapshot.getString("gender") == "Male"){
+                    rbGenderMale.isChecked = true
+                }
+                else if(documentSnapshot.getString("gender") == "Female"){
+                    rbGenderFemale.isChecked = true
+                }
+                else if(documentSnapshot.getString("gender") == "Other"){
+                    rbGenderOther.isChecked = true
+                }
+
+            } else {
+                Log.d("tag", "onEvent: Document do not exists")
+            }
+        }
+    }
+
+    private fun init(){
+
+        fAuth = FirebaseAuth.getInstance()
+        fStore = FirebaseFirestore.getInstance()
+
+        currUser = fAuth.currentUser!!
+
+        nameField = requireView().findViewById(R.id.edit_name_field_text)
+        emailField = requireView().findViewById(R.id.edit_email_field_text)
+        passwordField = requireView().findViewById(R.id.edit_pass_field_text)
+        ageField = requireView().findViewById(R.id.edit_age_field_text)
+        rbGenderFemale = requireView().findViewById(R.id.female_option)
+        rbGenderMale = requireView().findViewById(R.id.male_option)
+        rbGenderOther = requireView().findViewById(R.id.other_option)
+        btnEditProfile = requireView().findViewById(R.id.edit_profile_button)
+
     }
 
     companion object {
