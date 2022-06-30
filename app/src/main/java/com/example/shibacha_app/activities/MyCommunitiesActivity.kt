@@ -85,15 +85,8 @@ class MyCommunitiesActivity : AppCompatActivity(), CommunityClickInterface {
             }
         }
 
-    private fun editCommunities() {
-        //TODO: Edit button leads to edit page
-    }
-
     // When the community is clicked on
     override fun onCommunityClick(position: Int) {
         //TODO: Redirect to chat page
-        val i = Intent(this@MyCommunitiesActivity, EditCommunityActivity::class.java)
-        i.putExtra("community", communityList!![position])
-        startActivity(i)
     }
 }
