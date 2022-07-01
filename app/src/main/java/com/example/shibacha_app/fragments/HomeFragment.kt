@@ -49,6 +49,7 @@ class HomeFragment : Fragment() {
     private lateinit var btnNext: ImageButton
     private lateinit var lblCommName: TextView
     private lateinit var lblCommDesc: TextView
+    private lateinit var lblCommCate: TextView
     private lateinit var btnJoin: Button
     private var communityList: java.util.ArrayList<CommunityModel?>? = null
     private var dbRef: DatabaseReference? = null
@@ -97,6 +98,7 @@ class HomeFragment : Fragment() {
         communityList = java.util.ArrayList()
 //        fStore = FirebaseFirestore.getInstance()
 
+        <<<<<<< Updated upstream
 //        var query = fStore.collection("TestCollection")
 //        query
 //            .get()
@@ -123,6 +125,35 @@ class HomeFragment : Fragment() {
 //            }
 
         allCommunities
+        =======
+        var query = db.collection("Communities")
+        query
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+
+                    val id = document.id
+                    var imgLink = document.getString("communityImg")!!
+                    Log.d("Debugging", imgLink)
+
+                    // Show Image
+                    var imageView: ImageView = ImageView(activity)
+                    Picasso.get().load(imgLink).into(imageView)
+                    if (imageView != null) {
+                        slideImages(imageView)
+                    }
+
+                    //
+
+                    communityList!!.add(document.toObject<CommunityModel>())
+                    updateText()
+                    Log.d("Debugging", "hello")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("Warning", "Error getting documents.", exception)
+            }
+        >>>>>>> Stashed changes
 
     }
 
@@ -132,6 +163,7 @@ class HomeFragment : Fragment() {
         btnPrev = requireView().findViewById(R.id.prev_btn)
         lblCommName = requireView().findViewById(R.id.community_lbl)
         lblCommDesc = requireView().findViewById(R.id.comm_desc_lbl)
+        lblCommCate = requireView().findViewById(R.id.comm_cate_lbl)
         btnJoin = requireView().findViewById(R.id.join_btn)
 
         btnNext.setOnClickListener{ goToNext() }
@@ -178,7 +210,11 @@ class HomeFragment : Fragment() {
     }
     private fun goToPrev(){
         viewFlipper.showPrevious()
-        carouselIdx = ( carouselIdx + 1 ) % (communityList?.size!!)
+        carouselIdx = ( carouselIdx - 1 )
+        if (carouselIdx < 0){
+            carouselIdx = 2
+        }
+        carouselIdx %= (communityList?.size!!)
         updateText()
     }
 
@@ -186,6 +222,8 @@ class HomeFragment : Fragment() {
     private fun updateText(){
         lblCommName.text = "Name: " + communityList!!.get(carouselIdx)?.communityName.toString()
         lblCommDesc.text = "Description: \n" + communityList!!.get(carouselIdx)?.communityDesc.toString()
+        lblCommCate.text = "Category: " + communityList!!.get(carouselIdx)?.communityCategory.toString()
+
     }
 
     private val allCommunities: Unit
