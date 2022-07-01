@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -11,14 +12,12 @@
         android:layout_height="wrap_content"
         android:background="@color/green_background"
         android:padding="10dp"
-        android:gravity="center"
         >
 
         <ImageView
             android:id="@+id/community_dp"
             android:layout_width="200dp"
             android:layout_height="200dp"
-
             android:layout_centerHorizontal="true"
             android:scaleType="centerCrop" />
 
@@ -32,37 +31,24 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="31dp"
             android:layout_marginRight="10dp"
-            android:layout_toStartOf="@+id/edit_button"
+            android:layout_toStartOf="@id/community_member"
             android:text="@string/RVitem_name"
             android:textColor="@color/black"
             android:textSize="15dp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/leave_button"
+        <TextView
+            android:id="@+id/community_member"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/community_dp"
-            android:layout_alignEnd="@+id/community_dp"
-            android:backgroundTint="@color/red_primary"
-            android:layout_marginTop="5dp"
-            android:minWidth="0dp"
-            android:visibility="gone"
-            app:icon="@drawable/ic_leave_community"
-            app:iconPadding="0dp" />
-
-        <Button
-            android:id="@+id/edit_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/community_dp"
-            android:layout_alignEnd="@+id/community_dp"
-            android:backgroundTint="@color/blue_light"
-            android:layout_marginTop="5dp"
-            android:minWidth="0dp"
-            android:visibility="visible"
-            app:icon="@drawable/ic_edit"
-            app:iconPadding="0dp" />
+            android:layout_alignEnd="@id/community_dp"
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@drawable/ic_member"
+            android:text="10"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

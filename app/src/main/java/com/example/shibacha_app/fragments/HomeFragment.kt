@@ -55,7 +55,7 @@ class HomeFragment : Fragment() {
     private var communityList: java.util.ArrayList<CommunityModel?>? = null
     private var dbRef: DatabaseReference? = null
     private var carouselIdx = 0
-//    val db = Firebase.firestore
+    val db = Firebase.firestore
     private lateinit var fStore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,8 +94,8 @@ class HomeFragment : Fragment() {
         init()
 
         // Write a message to the database
-        val fireDB = Firebase.database
-        dbRef = fireDB.getReference("Communities")
+//        val fireDB = Firebase.database
+//        dbRef = fireDB.getReference("Communities")
         communityList = java.util.ArrayList()
         fStore = FirebaseFirestore.getInstance()
 
@@ -154,7 +154,6 @@ class HomeFragment : Fragment() {
             .addOnFailureListener { exception ->
                 Log.w("Warning", "Error getting documents.", exception)
             }
-//        >>>>>>> Stashed changes
 
     }
 
@@ -176,12 +175,13 @@ class HomeFragment : Fragment() {
         val commId = communityList!!.get(carouselIdx)?.communityId.toString()
         val user = Firebase.auth.currentUser
         val email = user?.email
+        val role = "member"
         var commSize = communityList!!.get(carouselIdx)?.communityMembers
 
         val fireDB = Firebase.database
         val dbRefJoin = fireDB.getReference("CommunityMembers")
 
-        val commMember = CommunityMemberModel(commId, email)
+        val commMember = CommunityMemberModel(commId, email, role)
 
         val uniqueId = commId + commSize.toString()
 
@@ -189,17 +189,17 @@ class HomeFragment : Fragment() {
             commSize = commSize + 1
         }
 
-        dbRef?.child(commId)?.child("communityMembers")?.setValue(commSize)
-
-        dbRefJoin.child(uniqueId).setValue(commMember)
-            .addOnSuccessListener {
-                Toast.makeText(context, "Successfully join the community", Toast.LENGTH_SHORT).show()
-                val intent = Intent(context, MyCommunitiesActivity::class.java)
-                startActivity(intent)
-            }
-            .addOnFailureListener {
-                Toast.makeText(context, "Failed to join the community", Toast.LENGTH_SHORT).show()
-            }
+//        dbRef?.child(commId)?.child("communityMembers")?.setValue(commSize)
+//
+//        dbRefJoin.child(uniqueId).setValue(commMember)
+//            .addOnSuccessListener {
+//                Toast.makeText(context, "Successfully join the community", Toast.LENGTH_SHORT).show()
+//                val intent = Intent(context, MyCommunitiesActivity::class.java)
+//                startActivity(intent)
+//            }
+//            .addOnFailureListener {
+//                Toast.makeText(context, "Failed to join the community", Toast.LENGTH_SHORT).show()
+//            }
 
     }
 
@@ -227,43 +227,43 @@ class HomeFragment : Fragment() {
 
     }
 
-    private val allCommunities: Unit
-        private get() {
-            communityList!!.clear()
-            dbRef!!.addChildEventListener(object : ChildEventListener {
-                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                    // add the value from the model
-
-                    var comm = snapshot.getValue(CommunityModel::class.java)
-                    communityList!!.add(comm)
-                    var imageView = ImageView(activity)
-                    var imgLink = comm?.communityImg.toString()
-                    Log.d("Debugging", imgLink)
-                    Picasso.get().load(imgLink).into(imageView)
-                    slideImages(imageView)
-                    updateText()
-//                    Log.d("debugging", communityList!!.get(0)?.communityImg.toString())
-                    // notify new addition
-//                    communityRVAdapter!!.notifyDataSetChanged()
-                }
-
-                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-//                    communityRVAdapter!!.notifyDataSetChanged()
-                }
-
-                override fun onChildRemoved(snapshot: DataSnapshot) {
-//                    communityRVAdapter!!.notifyDataSetChanged()
-                }
-
-                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-//                    communityRVAdapter!!.notifyDataSetChanged()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Log.d("debugging", "testa")
-                }
-            })
-        }
+//    private val allCommunities: Unit
+//        private get() {
+//            communityList!!.clear()
+//            dbRef!!.addChildEventListener(object : ChildEventListener {
+//                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+//                    // add the value from the model
+//
+//                    var comm = snapshot.getValue(CommunityModel::class.java)
+//                    communityList!!.add(comm)
+//                    var imageView = ImageView(activity)
+//                    var imgLink = comm?.communityImg.toString()
+//                    Log.d("Debugging", imgLink)
+//                    Picasso.get().load(imgLink).into(imageView)
+//                    slideImages(imageView)
+//                    updateText()
+////                    Log.d("debugging", communityList!!.get(0)?.communityImg.toString())
+//                    // notify new addition
+////                    communityRVAdapter!!.notifyDataSetChanged()
+//                }
+//
+//                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+////                    communityRVAdapter!!.notifyDataSetChanged()
+//                }
+//
+//                override fun onChildRemoved(snapshot: DataSnapshot) {
+////                    communityRVAdapter!!.notifyDataSetChanged()
+//                }
+//
+//                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+////                    communityRVAdapter!!.notifyDataSetChanged()
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {
+//                    Log.d("debugging", "testa")
+//                }
+//            })
+//        }
 
     companion object {
         /**

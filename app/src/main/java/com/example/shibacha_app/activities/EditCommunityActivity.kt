@@ -3,6 +3,9 @@ package com.example.shibacha_app.activities
 import android.R
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
@@ -11,7 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import com.example.shibacha_app.databinding.ActivityEditCommunityBinding
 import com.example.shibacha_app.models.CommunityModel
+import com.google.android.gms.tasks.Task
 import com.google.firebase.database.*
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
+import com.squareup.picasso.Picasso
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -21,8 +29,8 @@ class EditCommunityActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditCommunityBinding
     private lateinit var firedb: FirebaseDatabase
     private lateinit var dbref: DatabaseReference
-    private lateinit var dbrefSpinner: DatabaseReference
     private lateinit var categoryList: ArrayList<String>
+    val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +43,6 @@ class EditCommunityActivity : AppCompatActivity() {
         var communityID: String = ""
 
         dbref = firedb.getReference("Communities").child(communityID)
-
-        //get categories
-//        dbrefSpinner = firedb.getReference("Categories")
 
         val dbSpin = Firebase.firestore
         categoryList = ArrayList()
@@ -52,37 +57,20 @@ class EditCommunityActivity : AppCompatActivity() {
                 val categoriesAdapter = ArrayAdapter(this@EditCommunityActivity, R.layout.simple_spinner_item, categoryList)
                 categoriesAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
                 categorySpinner.adapter = categoriesAdapter
-            }
 
-//        dbrefSpinner.addValueEventListener(object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                categoryList = ArrayList()
-//                for (categorySnapshot in dataSnapshot.children) {
-//                    val categoryName = categorySnapshot.child("categoryName").getValue(String::class.java)
-//                    if (categoryName != null) {
-//                        categoryList.add(categoryName)
-//                    }
-//                }
-//                val categorySpinner = binding.categoryField
-//                val categoriesAdapter = ArrayAdapter(this@EditCommunityActivity, R.layout.simple_spinner_item, categoryList)
-//                categoriesAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
-//                categorySpinner.adapter = categoriesAdapter
-//
-//                //Select the category
-//                val value = communityModel?.communityCategory
-//                val pos  = categoryList.indexOf(value)
-//                binding.categoryField.setSelection(pos)
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {}
-//        })
+                //Select the category
+                val value = communityModel?.communityCategory
+                val pos  = categoryList.indexOf(value)
+                binding.categoryField.setSelection(pos)
+            }
 
         //set values
         if (communityModel != null) {
             binding.commNameFieldText.setText(communityModel.communityName)
             binding.imgFieldText.setText(communityModel.communityImg)
+            Picasso.get().load(communityModel.communityImg).into(binding.communityImg)
             binding.descFieldText.setText(communityModel.communityDesc)
-            communityID = communityModel.communityName
+            communityID = communityModel.communityId
         }
 
         //Set button logic
@@ -98,9 +86,25 @@ class EditCommunityActivity : AppCompatActivity() {
         }
 
         //Exit TextBox
-        binding.imgFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
+        binding.imgField.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
         binding.commNameFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
         binding.descFieldText.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
+
+        //Display Image
+        binding.imgFieldText.addTextChangedListener( object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s.toString() != "") {
+                    Picasso.get().load(s.toString()).into(binding.communityImg)
+                }
+            }
+
+        })
 
     }
 
@@ -111,13 +115,19 @@ class EditCommunityActivity : AppCompatActivity() {
         val desc = binding.descFieldText.text.toString()
         val category = binding.categoryField.selectedItem.toString()
 
+        //validate
+        if (name.isBlank() || imagelink.isBlank() || desc.isBlank()) {
+            Toast.makeText(this, "Please fill in all the details!" , Toast.LENGTH_SHORT).show()
+            binding.progressCircular.visibility = View.GONE
+            return
+        }
+
         //initialize object
         val communityID = communityModel.communityId
-        val community:CommunityModel = CommunityModel(communityID, name, desc, imagelink, category)
+        val community = CommunityModel(communityID, name, desc, imagelink, category)
 
         //add to database
-        dbref = firedb.getReference("Communities")
-        dbref.child(communityID).setValue(community)
+        db.collection("Communities").document(communityID).set(community)
             .addOnSuccessListener {
                 Toast.makeText(this, "Successfully Updated to Database", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MyCommunitiesActivity::class.java)
@@ -132,12 +142,26 @@ class EditCommunityActivity : AppCompatActivity() {
     }
 
     private fun deleteCommunity( communityModel: CommunityModel ) {
-        dbref = firedb.getReference("Communities").child(communityModel.communityId)
-        dbref.removeValue()
-        Toast.makeText(this, "Successfully deleted Community", Toast.LENGTH_SHORT).show()
-        val intent = Intent(this, MyCommunitiesActivity::class.java)
-        startActivity(intent)
-        finish()
+        db.collection("Communities").document(communityModel.communityId).delete()
+            .addOnSuccessListener {
+                Toast.makeText(this, "Successfully deleted Community", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MyCommunitiesActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to delete Community", Toast.LENGTH_SHORT).show()
+            }
+
+        val query = db.collection("CommunityMembers").whereEqualTo("communityId", communityModel.communityId).get()
+        query.addOnSuccessListener {
+            for (document in it) {
+                db.collection("CommunityMembers").document(document.id).delete()
+            }
+        }
+
+
+
     }
 
     //remove keyboard

@@ -138,7 +138,7 @@ class RegisterActivity : AppCompatActivity() {
 
                 if (documentReference != null) {
                     documentReference.set(user).addOnSuccessListener {
-            //                    Log.d("TAG", "user profile is created for $userID")
+                        //                    Log.d("TAG", "user profile is created for $userID")
                     }
                 }
 

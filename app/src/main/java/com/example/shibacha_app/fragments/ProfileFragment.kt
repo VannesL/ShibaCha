@@ -146,7 +146,7 @@ class ProfileFragment : Fragment() {
         if (documentReference != null) {
             documentReference.set(user).addOnSuccessListener {
                 //                    Log.d("TAG", "user profile is created for $userID")
-                Toast.makeText(context, "Profile Successfully Updated", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Successfully join the community", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -162,11 +162,11 @@ class ProfileFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic fun newInstance(param1: String, param2: String) =
-                ProfileFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
+            ProfileFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
                 }
+            }
     }
 }

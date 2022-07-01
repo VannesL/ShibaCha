@@ -7,13 +7,13 @@
     tools:context=".fragments.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:text="@string/profile_fragment"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textSize="36sp"-->
-<!--        android:textStyle="bold"/>-->
+    <!--    <TextView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:text="@string/profile_fragment"-->
+    <!--        android:textAlignment="center"-->
+    <!--        android:textSize="36sp"-->
+    <!--        android:textStyle="bold"/>-->
     <ImageView
         android:id="@+id/tea_img"
         android:layout_width="188dp"
