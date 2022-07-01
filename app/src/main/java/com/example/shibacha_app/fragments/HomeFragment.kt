@@ -21,6 +21,7 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import com.synnapps.carouselview.CarouselView
@@ -55,7 +56,7 @@ class HomeFragment : Fragment() {
     private var dbRef: DatabaseReference? = null
     private var carouselIdx = 0
 //    val db = Firebase.firestore
-//    private lateinit var fStore: FirebaseFirestore
+    private lateinit var fStore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,9 +97,9 @@ class HomeFragment : Fragment() {
         val fireDB = Firebase.database
         dbRef = fireDB.getReference("Communities")
         communityList = java.util.ArrayList()
-//        fStore = FirebaseFirestore.getInstance()
+        fStore = FirebaseFirestore.getInstance()
 
-        <<<<<<< Updated upstream
+//        <<<<<<< Updated upstream
 //        var query = fStore.collection("TestCollection")
 //        query
 //            .get()
@@ -124,9 +125,9 @@ class HomeFragment : Fragment() {
 //                Log.w("Warning", "Error getting documents.", exception)
 //            }
 
-        allCommunities
-        =======
-        var query = db.collection("Communities")
+//        allCommunities
+//        =======
+        var query = fStore.collection("Communities")
         query
             .get()
             .addOnSuccessListener { result ->
@@ -153,7 +154,7 @@ class HomeFragment : Fragment() {
             .addOnFailureListener { exception ->
                 Log.w("Warning", "Error getting documents.", exception)
             }
-        >>>>>>> Stashed changes
+//        >>>>>>> Stashed changes
 
     }
 
