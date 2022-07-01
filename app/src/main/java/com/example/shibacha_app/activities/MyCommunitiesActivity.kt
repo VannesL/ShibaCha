@@ -14,6 +14,7 @@ import com.example.shibacha_app.adapters.CommunityRVAdapter.CommunityClickInterf
 import com.example.shibacha_app.models.CommunityModel
 import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.Query
@@ -26,12 +27,12 @@ import com.google.firebase.ktx.Firebase
 class MyCommunitiesActivity : AppCompatActivity(), CommunityClickInterface {
     private var communityRV: RecyclerView? = null
     private var addCommunity: FloatingActionButton? = null
-    private var fireDB: FirebaseDatabase? = null
-    private var dbRef: DatabaseReference? = null
     private var communityList: ArrayList<CommunityModel?>? = null
     private var communityRVAdapter: CommunityRVAdapter? = null
     val db = Firebase.firestore
     val ref = db.collection("Communities")
+    val fAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    val uid : String? = fAuth.currentUser?.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +42,6 @@ class MyCommunitiesActivity : AppCompatActivity(), CommunityClickInterface {
         communityRV = findViewById(R.id.recycler_view)
         addCommunity = findViewById(R.id.add_community_button)
         val back: FloatingActionButton = findViewById(R.id.back_button)
-        fireDB = FirebaseDatabase.getInstance()
-        dbRef = fireDB!!.getReference("Communities")
         communityList = ArrayList()
         communityRVAdapter = CommunityRVAdapter(communityList, this, this)
 
@@ -75,12 +74,22 @@ class MyCommunitiesActivity : AppCompatActivity(), CommunityClickInterface {
     // Show all the communities
     private val allCommunities: Unit
         private get() {
-            val query = db.collection("Communities").orderBy("communityName", Query.Direction.ASCENDING)
+            val query = db.collection("CommunityMembers").whereEqualTo("userId", uid)
             query.get().addOnSuccessListener { documents ->
                 for (document in documents) {
-                    val com = document.toObject<CommunityModel>()
-                    communityList?.add(com)
-                    communityRVAdapter?.notifyDataSetChanged()
+//                    if (uid != null) {
+//                        Log.d("CommunityMember", document.id)
+//                        document.getString("communityId")?.let { Log.d("CommunityId", it) }
+//                    };
+                    val q = db.collection("Communities").whereEqualTo("communityId", document.get("communityId"))
+                    q.get().addOnSuccessListener { docs->
+                        for (doc in docs) {
+//                            Log.d("Community", doc.id)
+                            val com = doc.toObject<CommunityModel>()
+                            communityList?.add(com)
+                            communityRVAdapter?.notifyDataSetChanged()
+                        }
+                    }
                 }
             }
         }
