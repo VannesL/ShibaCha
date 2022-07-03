@@ -34,4 +34,6 @@
     <string name="description">Description:</string>
     <string name="name">Name:</string>
     <string name="logout">Logout</string>
+    <string name="category">category</string>
+    <string name="pick_your_hobbies">Pick Your Hobbies!</string>
 </resources>

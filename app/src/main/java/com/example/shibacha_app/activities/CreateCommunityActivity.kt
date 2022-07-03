@@ -48,7 +48,7 @@ class CreateCommunityActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { res ->
                 for (doc in res){
-                    categoryList.add(doc.getString("CategoryName").toString())
+                    categoryList.add(doc.getString("categoryName").toString())
 //                    Log.d("Debugging", categoryList[0])
                 }
                 val categorySpinner = binding.categoryField

@@ -24,11 +24,27 @@
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_edit_hobbies"
         android:backgroundTint="@color/red_primary"
         android:text="@string/logout"
         android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="@color/white"/>
+
+    <Button
+        android:id="@+id/btn_edit_hobbies"
+        android:layout_width="300sp"
+        android:layout_height="80sp"
+        android:backgroundTint="@color/green_primary"
+        android:text="Edit Hobbies"
+        android:textColor="@color/black"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_logout" />
 
 
 

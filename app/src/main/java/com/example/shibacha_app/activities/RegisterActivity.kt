@@ -142,7 +142,9 @@ class RegisterActivity : AppCompatActivity() {
                     }
                 }
 
-                val intent = Intent(this, HomeActivity::class.java)
+                Log.d("Test","Testt")
+
+                val intent = Intent(this, PickHobbiesActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {
