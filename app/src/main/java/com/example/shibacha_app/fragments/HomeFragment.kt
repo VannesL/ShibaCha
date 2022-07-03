@@ -1,6 +1,7 @@
 package com.example.shibacha_app.fragments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -10,15 +11,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.example.shibacha_app.R
 import com.example.shibacha_app.activities.HomeActivity
 import com.example.shibacha_app.activities.MyCommunitiesActivity
 import com.example.shibacha_app.adapters.CommunityRVAdapter
 import com.example.shibacha_app.models.CommunityMemberModel
 import com.example.shibacha_app.models.CommunityModel
+import com.example.shibacha_app.models.UserHobbyModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -53,10 +59,13 @@ class HomeFragment : Fragment() {
     private lateinit var lblCommCate: TextView
     private lateinit var btnJoin: Button
     private var communityList: java.util.ArrayList<CommunityModel?>? = null
+    private var communityMemberList: ArrayList<String>? = ArrayList()
+    private var userHobbyList: ArrayList<String>? = ArrayList()
     private var dbRef: DatabaseReference? = null
     private var carouselIdx = 0
     val db = Firebase.firestore
     private lateinit var fStore: FirebaseFirestore
+    private lateinit var fAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +73,61 @@ class HomeFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+//        refreshHomeFrag(context)
     }
+
+//    override fun onResume() {
+//        super.onResume()
+//        init()
+//
+//        // Write a message to the database
+////        val fireDB = Firebase.database
+////        dbRef = fireDB.getReference("Communities")
+//        communityList = java.util.ArrayList()
+////        communityList!!.clear()
+//        fStore = FirebaseFirestore.getInstance()
+//
+////        <<<<<<< Updated upstream
+////        var query = fStore.collection("TestCollection")
+////        query
+////            .get()
+////            .addOnSuccessListener { result ->
+////                for (document in result) {
+////
+////                    val id = document.id
+////                    var imgLink = document.getString("CommunityImageLink")!!
+////                    Log.d("Debugging", imgLink)
+////
+////                    //
+////                    var imageView: ImageView = ImageView(activity)
+////                    Picasso.get().load(imgLink).into(imageView)
+////                    if (imageView != null) {
+////                        slideImages(imageView)
+////                    }
+////                    //
+////
+////                    Log.d("Debugging", "hello")
+////                }
+////            }
+////            .addOnFailureListener { exception ->
+////                Log.w("Warning", "Error getting documents.", exception)
+////            }
+//
+////        allCommunities
+////        =======
+//
+//        // test query
+//        fillArrayList()
+//        //
+//
+//
+//        fillCommunityList()
+////        btnJoin.isVisible = true
+//
+//
+//        checkEmpty()
+//    }
 
     private fun slideImages(img: ImageView){
 
@@ -73,6 +136,8 @@ class HomeFragment : Fragment() {
 
         viewFlipper.setInAnimation(activity, android.R.anim.fade_in)
         viewFlipper.setOutAnimation(activity, android.R.anim.fade_out)
+
+//        btnJoin.isVisible = true
 
     }
 
@@ -97,6 +162,7 @@ class HomeFragment : Fragment() {
 //        val fireDB = Firebase.database
 //        dbRef = fireDB.getReference("Communities")
         communityList = java.util.ArrayList()
+//        communityList!!.clear()
         fStore = FirebaseFirestore.getInstance()
 
 //        <<<<<<< Updated upstream
@@ -127,34 +193,130 @@ class HomeFragment : Fragment() {
 
 //        allCommunities
 //        =======
+
+        // test query
+        fillArrayList()
+        //
+
+
+        fillCommunityList()
+//        btnJoin.isVisible = true
+
+
+        checkEmpty()
+    }
+
+    private fun checkEmpty() {
+        if (communityList!!.isEmpty()) {
+            lblCommCate.text = ""
+            lblCommName.text = ""
+            lblCommDesc.text = "Looks like there's currently no recommended community for you"
+
+    //            var imageView: ImageView = ImageView(activity)
+    //            Picasso.get().load("https://cdn.shopify.com/s/files/1/1061/1924/products/Emoji_Icon_-_Sad_Emoji_large.png?v=1571606093").into(imageView)
+    //            if (imageView != null) {
+    //                slideImages(imageView)
+    //            }
+//            btnJoin.isVisible = false
+        }
+    }
+
+    private fun fillCommunityList() {
         var query = fStore.collection("Communities")
         query
             .get()
             .addOnSuccessListener { result ->
                 for (document in result) {
 
-                    val id = document.id
-                    var imgLink = document.getString("communityImg")!!
-                    Log.d("Debugging", imgLink)
 
-                    // Show Image
-                    var imageView: ImageView = ImageView(activity)
-                    Picasso.get().load(imgLink).into(imageView)
-                    if (imageView != null) {
-                        slideImages(imageView)
+//                    Log.d(
+//                        "Testing",
+//                        communityMemberList?.contains(document.toObject(CommunityModel::class.java).communityId)
+//                            .toString()
+//                    )
+                    if (communityMemberList?.isEmpty() == true  || communityMemberList?.contains(document.toObject(CommunityModel::class.java).communityId) == false) {
+                        Log.d("Testing", "c")
+                        if (userHobbyList?.isEmpty() == true) {
+                            val id = document.id
+                            var imgLink = document.getString("communityImg")!!
+                            Log.d("Debugging", imgLink)
+
+                            // Show Image
+                            var imageView: ImageView = ImageView(activity)
+                            Picasso.get().load(imgLink).into(imageView)
+                            if (imageView != null) {
+                                slideImages(imageView)
+                            }
+
+                            //
+
+                            communityList!!.add(document.toObject<CommunityModel>())
+                            updateText()
+                            Log.d("Debugging", "hello")
+                        } else {
+                            Log.d("Testing",
+                                userHobbyList?.contains(document.toObject(CommunityModel::class.java).communityCategory)
+                                    .toString()
+                            )
+                            if (userHobbyList?.contains(document.toObject(CommunityModel::class.java).communityCategory) == true) {
+
+                                val id = document.id
+                                var imgLink = document.getString("communityImg")!!
+                                Log.d("Debugging", imgLink)
+
+                                // Show Image
+                                var imageView: ImageView = ImageView(activity)
+                                Picasso.get().load(imgLink).into(imageView)
+                                if (imageView != null) {
+                                    slideImages(imageView)
+                                }
+
+                                //
+
+                                communityList!!.add(document.toObject<CommunityModel>())
+                                updateText()
+                                Log.d("Debugging", "hello")
+                            }
+                        }
+
+
                     }
 
-                    //
-
-                    communityList!!.add(document.toObject<CommunityModel>())
-                    updateText()
-                    Log.d("Debugging", "hello")
                 }
             }
             .addOnFailureListener { exception ->
                 Log.w("Warning", "Error getting documents.", exception)
             }
+    }
 
+    private fun fillArrayList() {
+        var q = fStore.collection("CommunityMembers")
+        q.get().addOnSuccessListener { result ->
+            for (doc in result) {
+                if (doc.toObject(CommunityMemberModel::class.java).userId.equals(fAuth.currentUser?.uid)) {
+                    Log.d("Testing", "a")
+                    doc.toObject(CommunityMemberModel::class.java).communityId?.let {
+                        communityMemberList?.add(
+                            it
+                        )
+                    }
+                }
+            }
+        }
+
+        q = fStore.collection("UserHobbies")
+        q.get().addOnSuccessListener { res ->
+            for (doc in res) {
+                if (doc.toObject(UserHobbyModel::class.java).userId.equals(fAuth.currentUser?.uid)) {
+                    Log.d("Testing", "b")
+                    doc.toObject(UserHobbyModel::class.java).categoryName?.let {
+                        userHobbyList?.add(
+                            it
+                        )
+                    }
+                }
+            }
+        }
     }
 
     private fun init(){
@@ -165,28 +327,65 @@ class HomeFragment : Fragment() {
         lblCommDesc = requireView().findViewById(R.id.comm_desc_lbl)
         lblCommCate = requireView().findViewById(R.id.comm_cate_lbl)
         btnJoin = requireView().findViewById(R.id.join_btn)
+        fAuth = Firebase.auth
 
         btnNext.setOnClickListener{ goToNext() }
         btnPrev.setOnClickListener { goToPrev() }
         btnJoin.setOnClickListener { joinCommunity() }
     }
 
+    private fun refreshHomeFrag(context: Context?){
+        context?.let{
+            val fragmentManager = (context as? AppCompatActivity)?.supportFragmentManager
+
+            fragmentManager?.let {
+                val currFrag = fragmentManager.findFragmentById(R.id.frame_container)
+                currFrag?.let {
+                    val fragTrans = fragmentManager.beginTransaction()
+                    fragTrans.detach(it)
+                    fragTrans.attach(it)
+                    fragTrans.commit()
+                }
+            }
+        }
+    }
+
     private fun joinCommunity(){
+        if(communityList.isNullOrEmpty()){
+            return
+        }
         val commId = communityList!!.get(carouselIdx)?.communityId.toString()
         val user = Firebase.auth.currentUser
-        val email = user?.email
-        val role = "member"
-        var commSize = communityList!!.get(carouselIdx)?.communityMembers
+        val id = fAuth.currentUser?.uid
+        val role = "Member"
+        val currComm = communityList!!.get(carouselIdx)
+        var commSize = currComm?.communityMembers
 
         val fireDB = Firebase.database
         val dbRefJoin = fireDB.getReference("CommunityMembers")
 
-        val commMember = CommunityMemberModel(commId, email, role)
+        val commMember = CommunityMemberModel(commId, id, role)
 
         val uniqueId = commId + commSize.toString()
 
         if (commSize != null) {
             commSize = commSize + 1
+        }
+
+        var que = fStore.collection("CommunityMembers")
+
+        que.add(commMember).addOnSuccessListener {
+            val docRef = fStore.collection("Communities").document(commId)
+            val comm = CommunityModel(commId, currComm?.communityName,
+                currComm?.communityDesc, currComm?.communityImg,
+                currComm?.communityCategory, commSize)
+            docRef.set(comm).addOnSuccessListener {
+                //
+                val intent = Intent(context, MyCommunitiesActivity::class.java)
+                startActivity(intent)
+                activity?.finish()
+            }
+
         }
 
 //        dbRef?.child(commId)?.child("communityMembers")?.setValue(commSize)
@@ -204,19 +403,25 @@ class HomeFragment : Fragment() {
     }
 
     private fun goToNext(){
-        viewFlipper.showNext()
-        carouselIdx = ( carouselIdx + 1 ) % (communityList?.size!!)
-        updateText()
+        if(communityList?.isNotEmpty() == true){
+            viewFlipper.showNext()
+            carouselIdx = ( carouselIdx + 1 ) % (communityList?.size!!)
+            updateText()
+        }
+
 
     }
     private fun goToPrev(){
-        viewFlipper.showPrevious()
-        carouselIdx = ( carouselIdx - 1 )
-        if (carouselIdx < 0){
-            carouselIdx = 2
+        if(communityList?.isNotEmpty() == true){
+            viewFlipper.showPrevious()
+            carouselIdx = ( carouselIdx - 1 )
+            if (carouselIdx < 0){
+                carouselIdx = 2
+            }
+            carouselIdx %= (communityList?.size!!)
+            updateText()
         }
-        carouselIdx %= (communityList?.size!!)
-        updateText()
+
     }
 
     @SuppressLint("SetTextI18n")

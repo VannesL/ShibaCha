@@ -73,20 +73,31 @@ class PickHobbiesActivity : AppCompatActivity() {
         val uid = fAuth.currentUser?.uid
         val arrList = categoryRVAdapter.checkedArr
 
-        for(a in arrList){
-            val userHobby = UserHobbyModel(uid,a)
-            fStore.collection("UserHobbies")
-                .add(userHobby)
-                .addOnSuccessListener { documentReference ->
-                    Log.d("Testing", "DocumentSnapshot added with ID: ${documentReference.id}")
-                }
-                .addOnFailureListener { e ->
-                    Log.w("Testing", "Error adding document", e)
-                }
-        }
+         fStore.collection("UserHobbies").whereEqualTo("userId", uid).get().addOnSuccessListener { res ->
+             for (doc in res){
+                 fStore.collection("UserHobbies").document(doc.id).delete()
+             }
 
-        val intent = Intent(this, HomeActivity::class.java)
-        startActivity(intent)
+             for(a in arrList){
+                 val userHobby = UserHobbyModel(uid,a)
+                 fStore.collection("UserHobbies")
+                     .add(userHobby)
+                     .addOnSuccessListener { documentReference ->
+                         Log.d("Testing", "DocumentSnapshot added with ID: ${documentReference.id}")
+                     }
+                     .addOnFailureListener { e ->
+                         Log.w("Testing", "Error adding document", e)
+                     }
+             }
+
+             val intent = Intent(this, HomeActivity::class.java)
+             startActivity(intent)
+         }
+
+
+
+
+
     }
 
     private fun gotoHome() {

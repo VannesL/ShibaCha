@@ -23,6 +23,14 @@ public class CommunityModel implements Parcelable {
         this.communityCategory = communityCategory;
         this.communityMembers = 1;
     }
+    public CommunityModel(String communityId, String communityName, String communityDesc, String communityImg, String communityCategory, Integer communityMembers) {
+        this.communityId = communityId;
+        this.communityName = communityName;
+        this.communityDesc = communityDesc;
+        this.communityImg = communityImg;
+        this.communityCategory = communityCategory;
+        this.communityMembers = communityMembers;
+    }
 
     protected CommunityModel(Parcel in) {
         communityId = in.readString();

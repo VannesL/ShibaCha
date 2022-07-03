@@ -4,6 +4,9 @@ import android.os.Parcel
 import android.os.Parcelable
 
 class UserHobbyModel(var userId: String?, var categoryName: String?): Parcelable {
+
+    constructor(): this(null,null){}
+
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString()
