@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.shibacha_app.R;
 import com.example.shibacha_app.activities.EditCommunityActivity;
+import com.example.shibacha_app.activities.HomeActivity;
 import com.example.shibacha_app.models.CommunityMemberModel;
 import com.example.shibacha_app.models.CommunityModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -125,6 +126,8 @@ public class CommunityRVAdapter extends RecyclerView.Adapter<CommunityRVAdapter.
                                 Log.d("TestLeave", document.getId());
                                 db.collection("CommunityMembers").document(document.getId()).delete();
                             }
+                            Intent i = new Intent(context, HomeActivity.class);
+                            context.startActivity(i);
                         } else {
                             Log.d("Test", "Error getting documents", task.getException());
                         }
