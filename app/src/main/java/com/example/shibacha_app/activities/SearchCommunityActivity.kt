@@ -22,16 +22,20 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.CommunityClickInterface {
     private lateinit var binding: ActivitySearchCommunityBinding
-    lateinit var firedb: FirebaseDatabase
-    lateinit var dbref: DatabaseReference
+//    lateinit var firedb: FirebaseDatabase
+//    lateinit var dbref: DatabaseReference
     private lateinit var communityList: ArrayList<CommunityModel>
     private lateinit var filteredList: ArrayList<CommunityModel>
     private lateinit var mCommunityRVAdapter: CommunitySearchRVAdapter
     private lateinit var communityRV: RecyclerView
     private lateinit var searchBar: EditText
+    private lateinit var fStore: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,9 +43,10 @@ class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.Co
         setContentView(R.layout.activity_search_community)
 
         //reference database
-        firedb = FirebaseDatabase.getInstance()
-        dbref = firedb.getReference("Communities")
+//        firedb = FirebaseDatabase.getInstance()
+//        dbref = firedb.getReference("Communities")
 
+        fStore = Firebase.firestore
         // initialize values
         communityRV = findViewById(R.id.recycler_view)
         communityList = arrayListOf<CommunityModel>()
@@ -103,28 +108,39 @@ class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.Co
 
     private fun getAllCommunities() {
         communityList.clear()
-        dbref.addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+        fStore.collection("Communities")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result){
                 // add the value from the model
-                communityList.add(snapshot.getValue(CommunityModel::class.java)!!)
+                communityList.add(document.toObject(CommunityModel::class.java))
                 // notify new addition
                 mCommunityRVAdapter.notifyDataSetChanged()
+                }
             }
 
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                mCommunityRVAdapter.notifyDataSetChanged()
-            }
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                mCommunityRVAdapter.notifyDataSetChanged()
-            }
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                mCommunityRVAdapter.notifyDataSetChanged()
-            }
-
-            override fun onCancelled(error: DatabaseError) {}
-        })
+//        dbref.addChildEventListener(object : ChildEventListener {
+//            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+//                // add the value from the model
+//                communityList.add(snapshot.getValue(CommunityModel::class.java)!!)
+//                // notify new addition
+//                mCommunityRVAdapter.notifyDataSetChanged()
+//            }
+//
+//            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+//                mCommunityRVAdapter.notifyDataSetChanged()
+//            }
+//
+//            override fun onChildRemoved(snapshot: DataSnapshot) {
+//                mCommunityRVAdapter.notifyDataSetChanged()
+//            }
+//
+//            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+//                mCommunityRVAdapter.notifyDataSetChanged()
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {}
+//        })
     }
 
     //remove keyboard

@@ -12,6 +12,7 @@ import android.widget.ViewFlipper
 import com.example.shibacha_app.R
 import com.example.shibacha_app.activities.IntroActivity
 import com.example.shibacha_app.activities.MyCommunitiesActivity
+import com.example.shibacha_app.activities.PickHobbiesActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -31,6 +32,7 @@ class SettingFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var btnLogout: Button
+    private lateinit var btnEditHobbies: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,8 +58,15 @@ class SettingFragment : Fragment() {
 
     private fun init(){
         btnLogout = requireView().findViewById(R.id.btn_logout)
+        btnEditHobbies = requireView().findViewById(R.id.btn_edit_hobbies)
 
         btnLogout.setOnClickListener { logout() }
+        btnEditHobbies.setOnClickListener { goToEditHobbies() }
+    }
+
+    private fun goToEditHobbies(){
+        val intent = Intent(context, PickHobbiesActivity::class.java)
+        startActivity(intent)
     }
 
     private fun logout(){
