@@ -66,6 +66,7 @@ public class CommunityRVAdapter extends RecyclerView.Adapter<CommunityRVAdapter.
         // Set values for view
         CommunityModel communityItem = communityList.get(position);
         holder.communityName.setText(communityItem.getCommunityName());
+        holder.communityCategory.setText(communityItem.getCommunityCategory());
         Picasso.get().load(communityItem.getCommunityImg()).into(holder.communityDP);
         setAnimation(holder.itemView, position);
 
@@ -154,7 +155,7 @@ public class CommunityRVAdapter extends RecyclerView.Adapter<CommunityRVAdapter.
         private ImageView communityDP;
         private Button editBtn;
         private Button leaveBtn;
-
+        private TextView communityCategory;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -162,6 +163,7 @@ public class CommunityRVAdapter extends RecyclerView.Adapter<CommunityRVAdapter.
             communityDP = itemView.findViewById(R.id.community_dp);
             editBtn = itemView.findViewById(R.id.edit_button);
             leaveBtn = itemView.findViewById(R.id.leave_button);
+            communityCategory = itemView.findViewById(R.id.community_category);
         }
     }
 

@@ -170,7 +170,7 @@ class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.Co
         val comDesc: TextView = view.findViewById(R.id.community_desc)
         val comCategory: TextView = view.findViewById(R.id.community_category)
         val comImg: ImageView = view.findViewById(R.id.community_img_sheet)
-        val joinBtn: Button = view.findViewById(R.id.join_btn)
+        val joinBtn: Button = view.findViewById(R.id.join_btn_sheet)
 
         comName.setText(communityModel.communityName)
         comDesc.setText(communityModel.communityDesc)

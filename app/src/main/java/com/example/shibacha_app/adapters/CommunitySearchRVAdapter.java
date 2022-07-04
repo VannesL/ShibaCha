@@ -44,6 +44,7 @@ public class CommunitySearchRVAdapter extends RecyclerView.Adapter<CommunitySear
         CommunityModel communityItem = communityList.get(position);
         holder.communityName.setText(communityItem.getCommunityName());
         holder.communityMember.setText(communityItem.getCommunityMembers().toString());
+        holder.communityCategory.setText(communityItem.getCommunityCategory());
         Picasso.get().load(communityItem.getCommunityImg()).into(holder.communityDP);
         setAnimation(holder.itemView, position);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -74,12 +75,14 @@ public class CommunitySearchRVAdapter extends RecyclerView.Adapter<CommunitySear
         private TextView communityName;
         private ImageView communityDP;
         private TextView communityMember;
+        private TextView communityCategory;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             communityName = itemView.findViewById(R.id.community_name);
             communityDP = itemView.findViewById(R.id.community_dp);
             communityMember = itemView.findViewById(R.id.community_member);
+            communityCategory = itemView.findViewById(R.id.community_category);
         }
     }
 

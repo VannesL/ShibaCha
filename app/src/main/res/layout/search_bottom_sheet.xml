@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/bottomSheet"
-    android:background="@color/green_primary">
+    android:background="@color/green_background">
 
     <TextView
         android:id="@+id/community_name_sheet"
@@ -36,16 +36,18 @@
         android:textStyle="bold"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/category"
         android:id="@+id/community_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/sheet_linear"
         android:layout_toEndOf="@id/community_img_sheet"
-        android:layout_below="@id/community_desc"
+        android:background="@color/grey_secondary"
         android:padding="3dp"
-        android:textStyle="bold"/>
+        android:text="@string/category"
+        android:textStyle="bold" />
 
     <LinearLayout
+        android:id="@+id/sheet_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -53,6 +55,7 @@
         android:layout_below="@id/community_img_sheet"
         >
         <Button
+            android:id="@+id/join_btn_sheet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
