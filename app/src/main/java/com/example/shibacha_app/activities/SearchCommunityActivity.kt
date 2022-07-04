@@ -9,8 +9,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,8 +18,10 @@ import com.example.shibacha_app.adapters.CommunityRVAdapter
 import com.example.shibacha_app.adapters.CommunitySearchRVAdapter
 import com.example.shibacha_app.databinding.ActivitySearchCommunityBinding
 import com.example.shibacha_app.models.CommunityModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
+import com.squareup.picasso.Picasso
 
 class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.CommunityClickInterface {
     private lateinit var binding: ActivitySearchCommunityBinding
@@ -51,6 +52,9 @@ class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.Co
         //set adapter for recycler view
         communityRV.adapter = mCommunityRVAdapter
         Log.d("Test", "Working")
+
+        // bottomSheet view
+        val bottomsheet = findViewById<RelativeLayout>(R.id.bottomSheet)
 
         //remove keyboard on enter
         searchBar = findViewById(R.id.search_name_field)
@@ -136,7 +140,29 @@ class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.Co
         }
     }
 
-    override fun onCommunityClick(position: Int) {
-        //startActivity(Intent(this, CreateCommunityActivity::class.java))
+    override fun onCommunityClick (position: Int) {
+        displayBottomSheet(communityList.get(position))
+    }
+
+    private fun displayBottomSheet (communityModel: CommunityModel) {
+        val dialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.search_bottom_sheet, null)
+        dialog.setContentView(view)
+        dialog.show()
+
+        val comName: TextView = view.findViewById(R.id.community_name_sheet)
+        val comDesc: TextView = view.findViewById(R.id.community_desc)
+        val comCategory: TextView = view.findViewById(R.id.community_category)
+        val comImg: ImageView = view.findViewById(R.id.community_img_sheet)
+        val joinBtn: Button = view.findViewById(R.id.join_btn)
+
+        comName.setText(communityModel.communityName)
+        comDesc.setText(communityModel.communityDesc)
+        comCategory.setText(communityModel.communityCategory)
+        Picasso.get().load(communityModel.communityImg).into(comImg)
+
+        joinBtn.setOnClickListener{
+            Toast.makeText(this, "Joined Community", Toast.LENGTH_SHORT).show()
+        }
     }
 }

@@ -34,4 +34,6 @@
     <string name="description">Description:</string>
     <string name="name">Name:</string>
     <string name="logout">Logout</string>
+    <string name="community_name">Community Name</string>
+    <string name="category">Category</string>
 </resources>

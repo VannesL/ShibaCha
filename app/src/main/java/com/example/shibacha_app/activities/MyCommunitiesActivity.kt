@@ -30,7 +30,6 @@ class MyCommunitiesActivity : AppCompatActivity(), CommunityClickInterface {
     private var communityList: ArrayList<CommunityModel?>? = null
     private var communityRVAdapter: CommunityRVAdapter? = null
     val db = Firebase.firestore
-    val ref = db.collection("Communities")
     val fAuth: FirebaseAuth = FirebaseAuth.getInstance()
     val uid : String? = fAuth.currentUser?.uid
 
