@@ -136,7 +136,41 @@ class ProfileFragment : Fragment() {
         else if (rbGenderOther.isChecked){
             gender = "Others"
         }
+
+
+
         var age = ageField.text.toString()
+
+        //
+        if (username.isBlank() || email.isBlank() || pass.isBlank() || age.isBlank()) {
+            Toast.makeText(activity, "Please fill in all the details!" , Toast.LENGTH_SHORT).show()
+//            binding.progressCircular.visibility = View.GONE
+            return
+        }
+
+        if(!email.contains("@") || !email.contains(".com", ignoreCase = true)) {
+            Toast.makeText(activity, "Email is invalid!" , Toast.LENGTH_SHORT).show()
+//            binding.progressCircular.visibility = View.GONE
+            return
+        }
+
+        if (pass.length < 6) {
+            Toast.makeText(activity, "Password must be 6 or more characters!" , Toast.LENGTH_SHORT).show()
+//            binding.progressCircular.visibility = View.GONE
+            return
+        }
+
+//        val gender: String
+//        //check if gender selected
+//        if (genderId != -1) {
+//            gender = findViewById<RadioButton>(genderId).text as String
+//        }
+//        else {
+//            Toast.makeText(this, "Please select a gender!" , Toast.LENGTH_SHORT).show()
+//            binding.progressCircular.visibility = View.GONE
+//            return
+//        }
+        //
 
         val uid = fAuth.currentUser?.uid
         val documentReference = uid?.let { it1 -> fStore.collection("Users").document(it1) };
