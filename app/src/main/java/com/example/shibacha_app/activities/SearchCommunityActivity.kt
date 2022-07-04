@@ -11,16 +11,21 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shibacha_app.R
 import com.example.shibacha_app.adapters.CommunityRVAdapter
 import com.example.shibacha_app.adapters.CommunitySearchRVAdapter
 import com.example.shibacha_app.databinding.ActivitySearchCommunityBinding
+import com.example.shibacha_app.models.CommunityMemberModel
 import com.example.shibacha_app.models.CommunityModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
 import com.squareup.picasso.Picasso
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -36,6 +41,7 @@ class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.Co
     private lateinit var communityRV: RecyclerView
     private lateinit var searchBar: EditText
     private lateinit var fStore: FirebaseFirestore
+    private lateinit var fAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,7 +103,7 @@ class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.Co
 //        println("Filter Function")
         filteredList = arrayListOf<CommunityModel>()
 
-        for ( community in communityList) {
+        for (community in communityList) {
             if (community.communityName.lowercase().contains(prompt.lowercase())) {
                 filteredList.add(community)
             }
@@ -157,7 +163,13 @@ class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.Co
     }
 
     override fun onCommunityClick (position: Int) {
-        displayBottomSheet(communityList.get(position))
+        Log.d("pos", position.toString())
+        if(filteredList.isNotEmpty()) {
+            displayBottomSheet(filteredList.get(position))
+        } else {
+            displayBottomSheet(communityList.get(position))
+        }
+
     }
 
     private fun displayBottomSheet (communityModel: CommunityModel) {
@@ -178,7 +190,39 @@ class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.Co
         Picasso.get().load(communityModel.communityImg).into(comImg)
 
         joinBtn.setOnClickListener{
-            Toast.makeText(this, "Joined Community", Toast.LENGTH_SHORT).show()
+            val commId = communityModel.communityId
+            val user = Firebase.auth.currentUser
+            fAuth = FirebaseAuth.getInstance()
+            val id = fAuth.currentUser?.uid
+            val role = "Member"
+            var commSize = communityModel.communityMembers
+
+            val fireDB = Firebase.database
+            val dbRefJoin = fireDB.getReference("CommunityMembers")
+
+            val commMember = CommunityMemberModel(commId, id, role)
+
+            val uniqueId = commId + commSize.toString()
+
+            if (commSize != null) {
+                commSize = commSize + 1
+            }
+
+            var que = fStore.collection("CommunityMembers")
+
+            que.add(commMember).addOnSuccessListener {
+                val docRef = fStore.collection("Communities").document(commId)
+                val comm = CommunityModel(commId, communityModel.communityName,
+                    communityModel.communityDesc, communityModel.communityImg,
+                    communityModel.communityCategory, commSize)
+                docRef.set(comm).addOnSuccessListener {
+                    //
+                    val intent = Intent(this, MyCommunitiesActivity::class.java)
+                    startActivity(intent)
+                    this.finish()
+                }
+
+            }
         }
     }
 }
