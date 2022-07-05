@@ -10,12 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ShibaCha_app">
         <activity
+            android:name=".activities.CommunityChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.MyCommunitiesActivity"
             android:exported="false" />
         <activity
             android:name=".activities.EditCommunityActivity"
             android:exported="false" />
-        <activity android:name=".activities.CreateCommunityActivity"/>
+        <activity android:name=".activities.CreateCommunityActivity" />
         <activity
             android:name=".activities.SearchCommunityActivity"
             android:exported="false" />
