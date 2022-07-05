@@ -161,6 +161,11 @@ class ProfileFragment : Fragment() {
             return
         }
 
+        if (age.toInt() >= 150) {
+            Toast.makeText(activity, "Age must be viable" , Toast.LENGTH_SHORT).show()
+            return
+        }
+
 //        val gender: String
 //        //check if gender selected
 //        if (genderId != -1) {
