@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -21,6 +22,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class RegisterActivity : AppCompatActivity() {
@@ -81,6 +83,12 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
+        if (age.toInt() >= 150) {
+            Toast.makeText(this, "Age must be viable" , Toast.LENGTH_SHORT).show()
+            binding.progressCircular.visibility = View.GONE
+            return
+        }
+
         val gender: String
         //check if gender selected
         if (genderId != -1) {
@@ -99,23 +107,50 @@ class RegisterActivity : AppCompatActivity() {
 
                 //create user in database
                 //make user model
-                val userID = username
 
-                val user:UserModel = UserModel(username, email, pass, gender)
 
                 //add to database
-                dbref.child("Users").child(userID).setValue(user)
-                    .addOnSuccessListener {
-                        Toast.makeText(this, "Successfully Signed Up!", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this, HomeActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(this, "Error during creation", Toast.LENGTH_SHORT).show()
-                    }
+//                dbref.child("Users").child(userID).setValue(user)
+//                    .addOnSuccessListener {
+//                        Toast.makeText(this, "Successfully Signed Up!", Toast.LENGTH_SHORT).show()
+//                        val intent = Intent(this, HomeActivity::class.java)
+//                        startActivity(intent)
+//                        finish()
+//                    }
+//                    .addOnFailureListener {
+//                        Toast.makeText(this, "Error during creation", Toast.LENGTH_SHORT).show()
+//                    }
 
-                val intent = Intent(this, LoginActivity::class.java)
+
+                val db = Firebase.firestore
+//                db.collection("Users")
+//                    .add(user)
+//                    .addOnSuccessListener { documentReference ->
+//                        Log.d("Debugging", "Successfully added to database")
+//                        Toast.makeText(this, "Successfully Signed Up!", Toast.LENGTH_SHORT).show()
+//                        val intent = Intent(this, HomeActivity::class.java)
+//                        startActivity(intent)
+//                        finish()
+//                    }
+//                    .addOnSuccessListener {
+//                        Log.w("Warning", "Error adding to database")
+//                        Toast.makeText(this, "Error during creation", Toast.LENGTH_SHORT).show()
+//                    }
+
+                val uid = auth.currentUser?.uid
+                val documentReference = uid?.let { it1 -> db.collection("Users").document(it1) };
+
+                val user:UserModel = UserModel(username, email, pass, gender, age.toInt())
+
+                if (documentReference != null) {
+                    documentReference.set(user).addOnSuccessListener {
+                        //                    Log.d("TAG", "user profile is created for $userID")
+                    }
+                }
+
+                Log.d("Test","Testt")
+
+                val intent = Intent(this, PickHobbiesActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {

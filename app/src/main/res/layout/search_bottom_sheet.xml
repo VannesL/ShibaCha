@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/bottomSheet"
+    android:background="@color/green_background">
+
+    <TextView
+        android:id="@+id/community_name_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:text="@string/community_name"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:background="@color/green_primary"/>
+
+    <ImageView
+        android:id="@+id/community_img_sheet"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/community_name_sheet"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:padding="4dp"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/community_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/community_name_sheet"
+        android:layout_toEndOf="@id/community_img_sheet"
+        android:padding="3dp"
+        android:text="@string/description"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/community_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/sheet_linear"
+        android:layout_toEndOf="@id/community_img_sheet"
+        android:background="@color/grey_secondary"
+        android:padding="3dp"
+        android:text="@string/category"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/sheet_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_below="@id/community_img_sheet"
+        >
+        <Button
+            android:id="@+id/join_btn_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/join"
+            android:backgroundTint="@color/blue_light"/>
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

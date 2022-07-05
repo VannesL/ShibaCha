@@ -1,28 +1,47 @@
 package com.example.shibacha_app.activities
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shibacha_app.R
 import com.example.shibacha_app.adapters.CommunityRVAdapter
+import com.example.shibacha_app.adapters.CommunitySearchRVAdapter
 import com.example.shibacha_app.databinding.ActivitySearchCommunityBinding
+import com.example.shibacha_app.models.CommunityMemberModel
 import com.example.shibacha_app.models.CommunityModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
-import com.google.firebase.database.ktx.getValue
+import com.google.firebase.database.ktx.database
+import com.squareup.picasso.Picasso
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
-class SearchCommunityActivity : AppCompatActivity(), CommunityRVAdapter.CommunityClickInterface {
+class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.CommunityClickInterface {
     private lateinit var binding: ActivitySearchCommunityBinding
-    lateinit var firedb: FirebaseDatabase
-    lateinit var dbref: DatabaseReference
+//    lateinit var firedb: FirebaseDatabase
+//    lateinit var dbref: DatabaseReference
     private lateinit var communityList: ArrayList<CommunityModel>
-    private lateinit var mCommunityRVAdapter: CommunityRVAdapter
+    private var filteredList: ArrayList<CommunityModel> = arrayListOf<CommunityModel>()
+    private lateinit var mCommunityRVAdapter: CommunitySearchRVAdapter
     private lateinit var communityRV: RecyclerView
+    private lateinit var searchBar: EditText
+    private lateinit var fStore: FirebaseFirestore
+    private lateinit var fAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,84 +49,180 @@ class SearchCommunityActivity : AppCompatActivity(), CommunityRVAdapter.Communit
         setContentView(R.layout.activity_search_community)
 
         //reference database
-        firedb = FirebaseDatabase.getInstance()
-        dbref = firedb.getReference("Communities")
+//        firedb = FirebaseDatabase.getInstance()
+//        dbref = firedb.getReference("Communities")
 
+        fStore = Firebase.firestore
         // initialize values
         communityRV = findViewById(R.id.recycler_view)
         communityList = arrayListOf<CommunityModel>()
-        mCommunityRVAdapter = CommunityRVAdapter(communityList, this, this)
+        mCommunityRVAdapter = CommunitySearchRVAdapter(communityList, this, this)
 
         // set how to display recycler view
         communityRV.layoutManager = GridLayoutManager(this, 2)
         //set adapter for recycler view
         communityRV.adapter = mCommunityRVAdapter
+        Log.d("Test", "Working")
+
+        // bottomSheet view
+        val bottomsheet = findViewById<RelativeLayout>(R.id.bottomSheet)
 
         //remove keyboard on enter
-        binding.searchNameField.setOnKeyListener(View.OnKeyListener {view, keyCode, event -> handleKeyEvent(view, keyCode, event) })
+        searchBar = findViewById(R.id.search_name_field)
+        searchBar.setOnFocusChangeListener { v, hasFocus -> OnFocusChangeListener(v, hasFocus) }
+        searchBar.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
 
-        searchCommunity()
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+//                println("Listener")
+//                Log.d("Test", "Listener")
+                filter(s.toString())
+            }
+        })
+//        searchCommunity()
+        val back: FloatingActionButton = findViewById(R.id.back_button)
+        back.setOnClickListener{
+            startActivity(
+                Intent(
+                    this,
+                    HomeActivity::class.java
+                )
+            )
+        }
+
+        getAllCommunities()
     }
 
-    private fun searchCommunity() {
-        val searchText = binding.searchNameFieldText.text.toString()
+    private fun filter(prompt: String) {
+//        Toast.makeText(this@SearchCommunityActivity, prompt , Toast.LENGTH_SHORT).show()
+//        Log.d("Test", "Function")
+//        println("Filter Function")
+        filteredList = arrayListOf<CommunityModel>()
 
-        val childEventListener = object : ChildEventListener {
-            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: kotlin.String?) {
-                Toast.makeText(this@SearchCommunityActivity, searchText , Toast.LENGTH_SHORT).show()
-                val community = dataSnapshot.getValue<CommunityModel>()
-                if (community != null) {
-                    var regex = Regex(searchText)
-                    if (regex.containsMatchIn(community.communityName)) {
-                        communityList.add(community)
-                    }
-                }
+        for (community in communityList) {
+            if (community.communityName.lowercase().contains(prompt.lowercase())) {
+                filteredList.add(community)
+            }
 
+            mCommunityRVAdapter.filterList(filteredList)
+        }
+    }
+
+    private fun getAllCommunities() {
+        communityList.clear()
+        fStore.collection("Communities")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result){
+                // add the value from the model
+                communityList.add(document.toObject(CommunityModel::class.java))
                 // notify new addition
                 mCommunityRVAdapter.notifyDataSetChanged()
+                }
             }
 
-            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: kotlin.String?) {
-                val newCommunity = dataSnapshot.getValue<CommunityModel>()
-                val communityKey = dataSnapshot.key
-
-                mCommunityRVAdapter.notifyDataSetChanged()
-            }
-
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-                val commentKey = dataSnapshot.key
-
-                mCommunityRVAdapter.notifyDataSetChanged()
-            }
-
-            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: kotlin.String?) {
-                val movedCommunity = dataSnapshot.getValue<CommunityModel>()
-                val communityKey = dataSnapshot.key
-
-                mCommunityRVAdapter.notifyDataSetChanged()
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-
-            }
-        }
-        dbref.addChildEventListener(childEventListener)
+//        dbref.addChildEventListener(object : ChildEventListener {
+//            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+//                // add the value from the model
+//                communityList.add(snapshot.getValue(CommunityModel::class.java)!!)
+//                // notify new addition
+//                mCommunityRVAdapter.notifyDataSetChanged()
+//            }
+//
+//            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+//                mCommunityRVAdapter.notifyDataSetChanged()
+//            }
+//
+//            override fun onChildRemoved(snapshot: DataSnapshot) {
+//                mCommunityRVAdapter.notifyDataSetChanged()
+//            }
+//
+//            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+//                mCommunityRVAdapter.notifyDataSetChanged()
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {}
+//        })
     }
 
     //remove keyboard
-    private fun handleKeyEvent(view: View, keyCode: Int, event: KeyEvent): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
-            // Hide the keyboard
-            val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-            searchCommunity()
-            return true
-        }
-        return false
+    private fun hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    override fun onCommunityClick(position: Int) {
-        //startActivity(Intent(this, CreateCommunityActivity::class.java))
+    //check if edittext in focus
+    private fun OnFocusChangeListener (v : View, hasfocus: Boolean) {
+        if (!hasfocus) {
+            hideKeyboard(v)
+        }
+    }
+
+    override fun onCommunityClick (position: Int) {
+        Log.d("pos", position.toString())
+        if(filteredList.isNotEmpty()) {
+            displayBottomSheet(filteredList.get(position))
+        } else {
+            displayBottomSheet(communityList.get(position))
+        }
+
+    }
+
+    private fun displayBottomSheet (communityModel: CommunityModel) {
+        val dialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.search_bottom_sheet, null)
+        dialog.setContentView(view)
+        dialog.show()
+
+        val comName: TextView = view.findViewById(R.id.community_name_sheet)
+        val comDesc: TextView = view.findViewById(R.id.community_desc)
+        val comCategory: TextView = view.findViewById(R.id.community_category)
+        val comImg: ImageView = view.findViewById(R.id.community_img_sheet)
+        val joinBtn: Button = view.findViewById(R.id.join_btn_sheet)
+
+        comName.setText(communityModel.communityName)
+        comDesc.setText(communityModel.communityDesc)
+        comCategory.setText(communityModel.communityCategory)
+        Picasso.get().load(communityModel.communityImg).into(comImg)
+
+        joinBtn.setOnClickListener{
+            val commId = communityModel.communityId
+            val user = Firebase.auth.currentUser
+            fAuth = FirebaseAuth.getInstance()
+            val id = fAuth.currentUser?.uid
+            val role = "Member"
+            var commSize = communityModel.communityMembers
+
+            val fireDB = Firebase.database
+            val dbRefJoin = fireDB.getReference("CommunityMembers")
+
+            val commMember = CommunityMemberModel(commId, id, role)
+
+            val uniqueId = commId + commSize.toString()
+
+            if (commSize != null) {
+                commSize = commSize + 1
+            }
+
+            var que = fStore.collection("CommunityMembers")
+
+            que.add(commMember).addOnSuccessListener {
+                val docRef = fStore.collection("Communities").document(commId)
+                val comm = CommunityModel(commId, communityModel.communityName,
+                    communityModel.communityDesc, communityModel.communityImg,
+                    communityModel.communityCategory, commSize)
+                docRef.set(comm).addOnSuccessListener {
+                    //
+                    val intent = Intent(this, MyCommunitiesActivity::class.java)
+                    startActivity(intent)
+                    this.finish()
+                }
+
+            }
+        }
     }
 }

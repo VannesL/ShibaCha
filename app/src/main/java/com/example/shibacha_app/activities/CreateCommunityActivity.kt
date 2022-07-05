@@ -2,19 +2,25 @@ package com.example.shibacha_app.activities
 
 import android.R
 import android.content.Intent
+import android.icu.lang.UCharacter.GraphemeClusterBreak.L
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.shibacha_app.databinding.ActivityCreateCommunityBinding
+import com.example.shibacha_app.models.CommunityMemberModel
 import com.example.shibacha_app.models.CommunityModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 
 
@@ -23,9 +29,9 @@ class CreateCommunityActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreateCommunityBinding
     private lateinit var firedb: FirebaseDatabase
     private lateinit var dbref: DatabaseReference
-    private lateinit var dbrefSpinner: DatabaseReference
     private lateinit var categoryList: ArrayList<String>
-    private lateinit var imageField: EditText
+    val db = Firebase.firestore
+    private lateinit var fAuth : FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,26 +42,20 @@ class CreateCommunityActivity : AppCompatActivity() {
         firedb = FirebaseDatabase.getInstance()
         dbref = firedb.getReference("Communities")
 
-        //get categories
-        dbrefSpinner = firedb.getReference("Categories")
-
-        dbrefSpinner.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                categoryList = ArrayList()
-                for (categorySnapshot in dataSnapshot.children) {
-                    val categoryName = categorySnapshot.child("categoryName").getValue(String::class.java)
-                    if (categoryName != null) {
-                        categoryList.add(categoryName)
-                    }
+        val dbSpin = Firebase.firestore
+        categoryList = ArrayList()
+        dbSpin.collection("Categories")
+            .get()
+            .addOnSuccessListener { res ->
+                for (doc in res){
+                    categoryList.add(doc.getString("categoryName").toString())
+//                    Log.d("Debugging", categoryList[0])
                 }
                 val categorySpinner = binding.categoryField
                 val categoriesAdapter = ArrayAdapter(this@CreateCommunityActivity, R.layout.simple_spinner_item, categoryList)
                 categoriesAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
                 categorySpinner.adapter = categoriesAdapter
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
 
         //Button Logic
         binding.buttonCreate.setOnClickListener{ createCommunity() }
@@ -74,20 +74,13 @@ class CreateCommunityActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                Log.d("Test", "Image")
-                if (s != null) {
-                    displayImg(s.toString())
+                if (s.toString() != "") {
+                    Picasso.get().load(s.toString()).into(binding.communityImg)
                 }
             }
 
         })
 
-    }
-
-    private fun displayImg(s: String) {
-        if(s != null) {
-            Picasso.get().load(s).into(binding.communityImg)
-        }
     }
 
     private fun createCommunity() {
@@ -105,19 +98,35 @@ class CreateCommunityActivity : AppCompatActivity() {
         }
 
         //initialize object
-        val communityID = name
-        val community:CommunityModel = CommunityModel(communityID, name, desc, imagelink, category)
+        val document = db.collection("Communities").document()
+        val communityID = document.id
+        val community = CommunityModel(communityID, name, desc, imagelink, category)
+        Log.d("Test", "here")
 
         //add to database
-        dbref.child(communityID).setValue(community)
+        document.set(community)
             .addOnSuccessListener {
-                Toast.makeText(this, "Successfully Added to Database", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Successfully Added Community to Database", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MyCommunitiesActivity::class.java)
                 startActivity(intent)
                 finish()
             }
             .addOnFailureListener {
-                Toast.makeText(this, "Failed to add to Database", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to add Community to Database", Toast.LENGTH_SHORT).show()
+            }
+
+        fAuth = FirebaseAuth.getInstance()
+        val uid = fAuth.currentUser?.uid
+        val communityMember = CommunityMemberModel(communityID, uid, "Owner")
+        db.collection("CommunityMembers").add(communityMember)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Successfully Added CommunityMember to Database", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MyCommunitiesActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to add CommunityMember to Database", Toast.LENGTH_SHORT).show()
             }
 
         return

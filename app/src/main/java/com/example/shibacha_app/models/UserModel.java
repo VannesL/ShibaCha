@@ -10,17 +10,27 @@ public class UserModel implements Parcelable {
     private String email;
     private String password;
     private String gender;
-    private String[] hobbies;
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    private Integer age;
 
     public UserModel() {
 
     }
 
-    public UserModel(String username, String email, String password, String gender) {
+    public UserModel(String username, String email, String password, String gender, Integer age) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.gender = gender;
+        this.age = age;
     }
 
     protected UserModel(Parcel in) {
@@ -28,6 +38,7 @@ public class UserModel implements Parcelable {
         email = in.readString();
         password = in.readString();
         gender = in.readString();
+        age = in.readInt();
     }
 
     public static final Creator<UserModel> CREATOR = new Creator<UserModel>() {
@@ -74,14 +85,6 @@ public class UserModel implements Parcelable {
         this.gender = gender;
     }
 
-    public String[] getHobbies() {
-        return hobbies;
-    }
-
-    public void setHobbies(String[] hobbies) {
-        this.hobbies = hobbies;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -93,6 +96,6 @@ public class UserModel implements Parcelable {
         parcel.writeString(email);
         parcel.writeString(password);
         parcel.writeString(gender);
-        parcel.writeArray(hobbies);
+        parcel.writeInt(age);
     }
 }

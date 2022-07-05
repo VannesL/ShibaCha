@@ -27,15 +27,14 @@
     <string name="gender_header">Gender:</string>
     <string name="desc_field">Enter Community Description</string>
     <string name="comm_name_field">Enter Community Name</string>
-    <string name="image_field">Enter Image Link</string>
+    <string name="image_field">Enter Image Link (direct link that has the image file referred inside)</string>
     <string name="button_create">create</string>
     <string name="update_button">Update</string>
     <string name="RVitem_name">Community Name</string>
     <string name="description">Description:</string>
     <string name="name">Name:</string>
-
-    <string name="community_list">Community List</string>
-    <string name="chat_community_name">Community Name</string>
-    <string name="community_info">Community Info</string>
-    <string name="header_chat_nav_title">Channels</string>
+    <string name="logout">Logout</string>
+    <string name="community_name">Community Name</string>
+    <string name="category">Category</string>
+    <string name="pick_your_hobbies">Pick Your Hobbies!</string>
 </resources>

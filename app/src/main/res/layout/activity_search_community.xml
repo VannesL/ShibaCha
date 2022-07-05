@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".activities.SearchCommunityActivity">
+    tools:context=".activities.SearchCommunityActivity">z
 
-    <com.google.android.material.textfield.TextInputLayout
+    <EditText
         android:id="@+id/search_name_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
-        android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:hint="@string/name_field">
+        android:hint="@string/name_field"
+        android:layout_toRightOf="@id/back_button"
+        />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/search_name_field_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text" />
-
-    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/green_primary"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_back" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/search_name_field"
+        android:layout_marginTop="20dp"
+        tools:layoutManager="GridLayoutManager"
         tools:listitem="@layout/community_rv_item"
-        tools:spanCount="2"
-        tools:layoutManager="GridLayoutManager" />
+        tools:spanCount="2" />
 
-</LinearLayout>
+</RelativeLayout>
