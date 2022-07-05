@@ -96,5 +96,7 @@ class MyCommunitiesActivity : AppCompatActivity(), CommunityClickInterface {
     // When the community is clicked on
     override fun onCommunityClick(position: Int) {
         //TODO: Redirect to chat page
+        val intent = Intent (this, CommunityChatActivity::class.java)
+        this.startActivity(intent)
     }
 }

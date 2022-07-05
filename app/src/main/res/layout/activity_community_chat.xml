@@ -10,7 +10,7 @@
         android:id="@+id/top_chat_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constrainttop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -20,8 +20,7 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:title="@string/chat_community_name"
-                app:titleCentered="true"
+                app:title="Community Name"
                 app:titleTextColor="@color/white"
                 app:menu="@menu/menu_chat"
                 app:navigationIcon="@drawable/ic_baseline_menu_24" />

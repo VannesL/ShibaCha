@@ -4,8 +4,8 @@
 
     <item
         android:id="@+id/ic_info"
-        android:title="@string/community_info"
-        android:contentDescription="@string/community_info"
+        android:title="Community Info"
+        android:contentDescription="Community Info"
         app:showAsAction="never" />
 
 </menu>
