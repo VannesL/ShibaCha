@@ -36,7 +36,7 @@ class SearchCommunityActivity : AppCompatActivity(), CommunitySearchRVAdapter.Co
 //    lateinit var firedb: FirebaseDatabase
 //    lateinit var dbref: DatabaseReference
     private lateinit var communityList: ArrayList<CommunityModel>
-    private lateinit var filteredList: ArrayList<CommunityModel>
+    private var filteredList: ArrayList<CommunityModel> = arrayListOf<CommunityModel>()
     private lateinit var mCommunityRVAdapter: CommunitySearchRVAdapter
     private lateinit var communityRV: RecyclerView
     private lateinit var searchBar: EditText
