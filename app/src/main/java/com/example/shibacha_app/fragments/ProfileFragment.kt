@@ -186,7 +186,7 @@ class ProfileFragment : Fragment() {
         if (documentReference != null) {
             documentReference.set(user).addOnSuccessListener {
                 //                    Log.d("TAG", "user profile is created for $userID")
-                Toast.makeText(activity, "Successfully join the community", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Successfully updated profile!", Toast.LENGTH_SHORT).show()
             }
         }
     }
