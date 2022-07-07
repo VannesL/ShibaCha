@@ -71,7 +71,7 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        if(!email.contains("@") || !email.contains(".com", ignoreCase = true)) {
+        if(!email.contains("@") || !email.contains(".")) {
             Toast.makeText(this, "Email is invalid!" , Toast.LENGTH_SHORT).show()
             binding.progressCircular.visibility = View.GONE
             return
