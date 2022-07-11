@@ -1,6 +1,8 @@
 package com.example.shibacha_app.activities
 
 import android.R
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -146,23 +148,38 @@ class EditCommunityActivity : AppCompatActivity() {
     }
 
     private fun deleteCommunity( communityModel: CommunityModel ) {
-        db.collection("Communities").document(communityModel.communityId).delete()
-            .addOnSuccessListener {
-                Toast.makeText(this, "Successfully deleted Community", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, MyCommunitiesActivity::class.java)
-                startActivity(intent)
-                finish()
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Failed to delete Community", Toast.LENGTH_SHORT).show()
-            }
+        //
+        var builder = AlertDialog.Builder(this)
+        builder.setTitle("Confirm Delete")
+        builder.setMessage("Are you sure you want to delete this community?")
+        builder.setPositiveButton("Yes", DialogInterface.OnClickListener{ dialog, id ->
+            db.collection("Communities").document(communityModel.communityId).delete()
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Successfully deleted Community", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, MyCommunitiesActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Failed to delete Community", Toast.LENGTH_SHORT).show()
+                }
 
-        val query = db.collection("CommunityMembers").whereEqualTo("communityId", communityModel.communityId).get()
-        query.addOnSuccessListener {
-            for (document in it) {
-                db.collection("CommunityMembers").document(document.id).delete()
+            val query = db.collection("CommunityMembers").whereEqualTo("communityId", communityModel.communityId).get()
+            query.addOnSuccessListener {
+                for (document in it) {
+                    db.collection("CommunityMembers").document(document.id).delete()
+                }
             }
-        }
+            dialog.cancel()
+        })
+        builder.setNegativeButton("No", DialogInterface.OnClickListener{ dialog, id ->
+            dialog.cancel()
+        })
+
+        var alert :AlertDialog = builder.create()
+        alert.show()
+        //
+
 
 
 

@@ -1,6 +1,8 @@
 package com.example.shibacha_app.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.shibacha_app.R;
 import com.example.shibacha_app.activities.EditCommunityActivity;
 import com.example.shibacha_app.activities.HomeActivity;
+import com.example.shibacha_app.activities.MyCommunitiesActivity;
 import com.example.shibacha_app.models.CommunityMemberModel;
 import com.example.shibacha_app.models.CommunityModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -117,22 +120,45 @@ public class CommunityRVAdapter extends RecyclerView.Adapter<CommunityRVAdapter.
         holder.leaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("TestLeave", "Pressed");
-                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                alert.setTitle("Confirm Leave");
+                alert.setMessage("Are you sure you want to leave this community?");
+                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("TestLeave", document.getId());
-                                db.collection("CommunityMembers").document(document.getId()).delete();
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Log.d("TestLeave", "Pressed");
+                        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        Log.d("TestLeave", document.getId());
+                                        db.collection("CommunityMembers").document(document.getId()).delete();
+                                    }
+                                    Intent i = new Intent(context, HomeActivity.class);
+                                    context.startActivity(i);
+                                } else {
+                                    Log.d("Test", "Error getting documents", task.getException());
+                                }
                             }
-                            Intent i = new Intent(context, HomeActivity.class);
-                            context.startActivity(i);
-                        } else {
-                            Log.d("Test", "Error getting documents", task.getException());
-                        }
+                        });
+
+                        dialog.dismiss();
                     }
                 });
+
+                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                    }
+                });
+
+                alert.show();
+
             }
         });
     }
