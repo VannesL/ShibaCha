@@ -106,6 +106,10 @@ class EditCommunityActivity : AppCompatActivity() {
 
         })
 
+        binding.backButton.setOnClickListener{
+            startActivity(Intent(this, MyCommunitiesActivity::class.java))
+        }
+
     }
 
     private fun editCommunity(communityModel: CommunityModel) {

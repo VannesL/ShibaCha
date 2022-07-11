@@ -81,6 +81,10 @@ class CreateCommunityActivity : AppCompatActivity() {
 
         })
 
+        binding.backButton.setOnClickListener{
+            startActivity(Intent(this, MyCommunitiesActivity::class.java))
+        }
+
     }
 
     private fun createCommunity() {

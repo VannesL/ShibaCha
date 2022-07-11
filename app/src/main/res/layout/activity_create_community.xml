@@ -103,11 +103,11 @@
         android:layout_width="259dp"
         android:layout_height="48dp"
         android:layout_marginBottom="32dp"
-        android:text="@string/button_create"
         android:fontFamily="@font/baloothambi"
+        android:text="@string/button_create"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/back_button" />
 
     <ProgressBar
         android:id="@+id/progress_circular"
@@ -120,5 +120,16 @@
         android:indeterminate="true"
         android:indeterminateDrawable="@drawable/progress_bar"
         android:visibility="gone"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:layout_margin="28dp"
+        android:backgroundTint="@color/green_primary"
+        android:src="@drawable/ic_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
